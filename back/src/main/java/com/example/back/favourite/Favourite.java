@@ -1,11 +1,8 @@
-package com.example.back.models;
+package com.example.back.favourite;
 
 import com.example.back.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 

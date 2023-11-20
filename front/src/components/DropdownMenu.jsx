@@ -15,7 +15,7 @@ const DropdownMenu = () => {
     <div>
       <div>
         <button
-          className="inline-flex items-center py-2 px-4 cursor-pointer"
+          className="inline-flex items-center cursor-pointer"
           onClick={handleDropdown}
         >
           Movies

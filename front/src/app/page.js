@@ -1,113 +1,212 @@
-import Image from 'next/image'
+"use client";
+import { movies } from "../data/movies";
+import { reviews } from "../data/reviews";
+import { useKeenSlider } from "keen-slider/react";
+
+import bgHero from "./assets/bg-hero.jpg";
+import horrorImg from "./assets/horror-category.jpg";
+import thrillerImg from "./assets/thriller-category.jpg";
+import romanceImg from "./assets/romance-category.jpg";
+import dramaImg from "./assets/drama-category.jpg";
+import scifiImg from "./assets/scifi-category.jpg";
+import comedyImg from "./assets/comedy-category.jpg";
+
+import Image from "next/image";
+import "keen-slider/keen-slider.min.css";
+import MoviePoster from "./components/MoviePoster";
+import ReviewCard from "./components/ReviewCard";
 
 export default function Home() {
+  const [sliderRef] = useKeenSlider({
+    loop: true,
+    renderMode: "performance",
+    rubberband: false,
+    mode: "free",
+    breakpoints: {
+      "(min-width: 400px)": {
+        slides: { perView: 3, spacing: 5 },
+      },
+      "(min-width: 1000px)": {
+        slides: { perView: 4, spacing: 10 },
+      },
+    },
+    slides: { perView: 2 },
+  });
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main>
+      <div className="h-screen text-center">
+        <div className="absolute top-0 shadow-topM w-full -z-10"></div>
+        <div className="">
+          <Image
+            className="-z-50"
+            src={bgHero}
+            fill
+            style={{ objectFit: "cover" }}
+            quality={100}
+            alt="Background pattern"
+          />
         </div>
+
+        <h1 className="text-2xl md:text-5xl font-bold mt-[200px]">
+          Track films you’ve watched. <br />
+          Save those you want to see. <br />
+          Tell your friends what’s good.
+        </h1>
+
+        <div className="absolute bottom-0 shadow-botM md:shadow-botD w-full -z-10"></div>
+
+        <article className="flex flex-col justify-center items-center text-center w-[90%] md:w-[60%] mx-auto mt-[250px] md:mt-[350px]">
+          <h2 className="text-xl md:text-3xl font-bold">Popular titles</h2>
+          <div
+            ref={sliderRef}
+            className="keen-slider w-full my-10 animate-fade-in"
+          >
+            {
+              //Mapeo del array de peliculas
+              movies.map((movie) => {
+                return (
+                  <MoviePoster
+                    key={movie.id}
+                    poster={movie.poster}
+                    title={movie.title}
+                  />
+                );
+              })
+            }
+          </div>
+        </article>
       </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <section className="mt-0 md:mt-[450px] text-center">
+        <h2 className="text-3xl font-bold mb-10">Popular categories</h2>
+        <div className="flex flex-wrap justify-center items-center max-w-[1300px] mx-auto gap-10">
+          <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
+            <Image
+              src={horrorImg}
+              quality={80}
+              priority={true}
+              fill
+              alt="horror category"
+              className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+            />
+            <a
+              href="#"
+              className="flex justify-center items-center font-bold text-4xl"
+            >
+              Horror
+            </a>
+          </div>
+          <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
+            <Image
+              src={thrillerImg}
+              fill
+              quality={80}
+              priority={true}
+              alt="thriller category"
+              className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+            />
+            <a
+              href="#"
+              className="flex justify-center items-center font-bold text-4xl"
+            >
+              Thriller
+            </a>
+          </div>
+          <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
+            <Image
+              src={romanceImg}
+              fill
+              quality={80}
+              priority={true}
+              alt="romance category"
+              className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+            />
+            <a
+              href="#"
+              className="flex justify-center items-center font-bold text-4xl"
+            >
+              Romance
+            </a>
+          </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+          {/* Este div solo se muestra en desktop */}
+          <div className="hidden md:flex gap-10">
+            <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
+              <Image
+                src={dramaImg}
+                fill
+                quality={80}
+                priority={true}
+                alt="drama category"
+                className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+              />
+              <a
+                href="#"
+                className="flex justify-center items-center font-bold text-4xl"
+              >
+                Drama
+              </a>
+            </div>
+            <div className="grid relative w-[330px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
+              <Image
+                src={scifiImg}
+                fill
+                quality={80}
+                priority={true}
+                alt="sci-fi category"
+                className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+              />
+              <a
+                href="#"
+                className="flex justify-center items-center font-bold text-4xl"
+              >
+                Sci-Fi
+              </a>
+            </div>
+            <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
+              <Image
+                src={comedyImg}
+                fill
+                quality={80}
+                priority={true}
+                alt="comedy category"
+                className="absolute -z-10 aspect-[16/9] rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+              />
+              <a
+                href="#"
+                className="flex justify-center items-center font-bold text-4xl"
+              >
+                Comedy
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <section className="flex flex-col justify-center items-center mx-auto my-[200px]">
+        <h3 className="text-3xl font-bold text-center mb-10 underline underline-offset-4">
+          Popular reviews
+        </h3>
+        <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
+          {
+            //Mapeo el array de reviews
+            reviews.map((review) => {
+              return (
+                <ReviewCard
+                  key={review.id}
+                  poster={review.poster}
+                  rating={review.rating}
+                  movie={review.movie}
+                  user={review.user}
+                  review={review.review}
+                  pfp={review.pfp}
+                />
+              );
+            })
+          }
+        </div>
+      </section>
     </main>
-  )
+  );
 }

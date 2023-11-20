@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  images: {
+    domains: [
+      "http2.mlstatic.com",
+      "m.media-amazon.com",
+      "upload.wikimedia.org",
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -3,18 +3,20 @@ import { movies } from "../data/movies";
 import { reviews } from "../data/reviews";
 import { useKeenSlider } from "keen-slider/react";
 
-import bgHero from "./assets/bg-hero.jpg";
-import horrorImg from "./assets/horror-category.jpg";
-import thrillerImg from "./assets/thriller-category.jpg";
-import romanceImg from "./assets/romance-category.jpg";
-import dramaImg from "./assets/drama-category.jpg";
-import scifiImg from "./assets/scifi-category.jpg";
-import comedyImg from "./assets/comedy-category.jpg";
+import bgHero from "../assets/bg-hero.jpg";
+import horrorImg from "../assets/horror-category.jpg";
+import thrillerImg from "../assets/thriller-category.jpg";
+import romanceImg from "../assets/romance-category.jpg";
+import dramaImg from "../assets/drama-category.jpg";
+import scifiImg from "../assets/scifi-category.jpg";
+import comedyImg from "../assets/comedy-category.jpg";
 
 import Image from "next/image";
 import "keen-slider/keen-slider.min.css";
-import MoviePoster from "./components/MoviePoster";
-import ReviewCard from "./components/ReviewCard";
+import MoviePoster from "../components/MoviePoster";
+import ReviewCard from "../components/ReviewCard";
+import NavLogged from "@/components/NavLogged";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [sliderRef] = useKeenSlider({
@@ -35,6 +37,8 @@ export default function Home() {
 
   return (
     <main>
+      <NavLogged />
+
       <div className="h-screen text-center">
         <div className="absolute top-0 shadow-topM w-full -z-10"></div>
         <div className="">
@@ -78,7 +82,7 @@ export default function Home() {
         </article>
       </div>
 
-      <section className="mt-0 md:mt-[450px] text-center">
+      <section className="mt-0 md:mt-[350px] text-center">
         <h2 className="text-3xl font-bold mb-10">Popular categories</h2>
         <div className="flex flex-wrap justify-center items-center max-w-[1300px] mx-auto gap-10">
           <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
@@ -207,6 +211,8 @@ export default function Home() {
           }
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }

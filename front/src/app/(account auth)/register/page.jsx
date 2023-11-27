@@ -1,26 +1,51 @@
 "use client";
 
 import { useState } from "react";
+import { saveLocalStorageData } from "@/controllers/localStorageController";
+
+import { useRouter } from "next/navigation";
+
+import { userContext } from "@/context/propContext";
+import { useContext } from "react";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setUserLogged } = useContext(userContext);
+
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const submitData = { username, email, password };
 
     try {
-      const response = await fetch("/auth/register", {
+      const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify(submitData),
       });
 
       if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const datatoken = data.token.split(".")[1];
+        const tokendecrypt = atob(datatoken);
+        const tokenparsed = JSON.parse(tokendecrypt);
+        const userLogged = {
+          token: data.token,
+          user: tokenparsed.sub,
+        };
+        saveLocalStorageData(userLogged);
+        setUserLogged(userLogged);
         console.log("Registracion exitosa");
+
+        router.push("/");
+        router.refresh();
       } else {
         console.error("Registracion fallada");
       }
@@ -35,7 +60,6 @@ const Register = () => {
         <h1 className="text-4xl font-bold">Register</h1>
         <form
           className="flex flex-col gap-10  text-black"
-          action=""
           onSubmit={handleSubmit}
         >
           <input

@@ -1,5 +1,4 @@
 import Footer from "@/components/Footer";
-import NotLoggedNav from "@/components/NotLoggedNav";
 import { Inter } from "next/font/google";
 import bgPattern from "@/assets/bg-hero.jpg";
 import Image from "next/image";

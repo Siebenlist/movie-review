@@ -1,26 +1,49 @@
 "use client";
 
+import { saveLocalStorageData } from "@/controllers/localStorageController";
+import { useRouter } from "next/navigation";
+
+import { userContext } from "@/context/propContext";
+import { useContext } from "react";
+
 import { useState } from "react";
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setUserLogged } = useContext(userContext);
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("email:", email);
+    console.log("username:", username);
     console.log("pass:", password);
     try {
-      const response = await fetch("/auth/login", {
+      const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
-        // Successful login, you may redirect or perform other actions
+        const data = await response.json();
+        console.log(data);
+        const datatoken = data.token.split(".")[1];
+        const tokendecrypt = atob(datatoken);
+        const tokenparsed = JSON.parse(tokendecrypt);
+        const userLogged = {
+          token: data.token,
+          user: tokenparsed.sub,
+        };
+        saveLocalStorageData(userLogged);
+        setUserLogged(userLogged);
         console.log("Login exitoso");
+
+        router.push("/");
+        router.refresh();
       } else {
         // Handle login failure
         console.error("Fallo el login");
@@ -36,16 +59,15 @@ const Login = () => {
         <h1 className="text-4xl font-bold">Login</h1>
         <form
           className="flex flex-col gap-10  text-black"
-          action=""
           onSubmit={handleSubmit}
         >
           <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
+            type="username"
+            name="username"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
             className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
           />
           <input

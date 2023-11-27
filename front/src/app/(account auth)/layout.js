@@ -1,5 +1,4 @@
 import Footer from "@/components/Footer";
-import NotLoggedNav from "@/components/NotLoggedNav";
 import { Inter } from "next/font/google";
 import bgPattern from "@/assets/bg-hero.jpg";
 import Image from "next/image";
@@ -11,16 +10,13 @@ export default function AccountLayout({ children }) {
     <section
       className={`${inter.className} flex flex-col justify-between min-h-screen`}
     >
-      <NotLoggedNav />
       <Image
         src={bgPattern}
         alt="Background pattern"
         fill
         className="absolute object-cover top-0 left-0 -z-10 hidden md:block"
       />
-
       {children}
-
       <Footer />
     </section>
   );

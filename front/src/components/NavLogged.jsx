@@ -1,31 +1,12 @@
-"use client";
-
 import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import HamburgerMenu from "./HamburgerMenu";
-import { deleteStorageData } from "@/controllers/localStorageController";
-
-import { userContext } from "@/context/propContext";
-import { useContext } from "react";
-
-import { useRouter } from "next/navigation";
 
 const NavLogged = () => {
-  const { setUserLogged } = useContext(userContext);
-
-  const router = useRouter();
-
-  const handleLogout = () => {
-    deleteStorageData();
-    setUserLogged({});
-    router.push("/");
-    router.refresh();
-  };
-
   return (
     <nav className="flex justify-between md:justify-evenly items-center p-7 z-10">
-      <a href="/" className="text-4xl font-bold text-logoPrimary">
-        Movie<span className="text-logoSecondary">R</span>
+      <a href="/" className="text-4xl font-bold">
+        MovieR
       </a>
 
       <HamburgerMenu />
@@ -38,7 +19,7 @@ const NavLogged = () => {
           <Link href="/profile">Profile</Link>
         </li>
         <li>
-          <button onClick={handleLogout}>Logout</button>
+          <Link href="/logout">Logout</Link>
         </li>
       </ul>
     </nav>

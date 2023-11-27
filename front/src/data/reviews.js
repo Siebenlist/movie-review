@@ -26,8 +26,7 @@ export const reviews = [
     movie: "Harry Potter",
     poster:
       "https://m.media-amazon.com/images/M/MV5BZTFkNmE5MjUtZDE1Yi00ZmQyLTk2YWUtN2EwODA1ZmNlOTA5XkEyXkFqcGdeQXVyMTM1MTE1NDMx._V1_.jpg",
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac nunc nisl. Curabitur pharetra nisl vitae massa varius, nec consequat nunc viverra. Suspendisse tincidunt arcu at odio vehicula congue.",
+    review: "This is a great Movie! I loved it.",
     rating: 4,
   },
 ];

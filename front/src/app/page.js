@@ -23,13 +23,13 @@ export default function Home() {
     loop: true,
     renderMode: "performance",
     rubberband: false,
-    mode: "free",
+    mode: "snap",
     breakpoints: {
       "(min-width: 400px)": {
-        slides: { perView: 3, spacing: 5 },
+        slides: { perView: 3.1, spacing: 5 },
       },
       "(min-width: 1000px)": {
-        slides: { perView: 4, spacing: 10 },
+        slides: { perView: 4.1, spacing: 10 },
       },
     },
     slides: { perView: 2 },
@@ -37,8 +37,6 @@ export default function Home() {
 
   return (
     <main>
-      <NavLogged />
-
       <div className="h-screen text-center">
         <div className="absolute top-0 shadow-topM w-full -z-10"></div>
         <div className="">
@@ -74,6 +72,7 @@ export default function Home() {
                     key={movie.id}
                     poster={movie.poster}
                     title={movie.title}
+                    carousel
                   />
                 );
               })
@@ -134,24 +133,24 @@ export default function Home() {
             </a>
           </div>
 
+          <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
+            <Image
+              src={dramaImg}
+              fill
+              quality={80}
+              priority={true}
+              alt="drama category"
+              className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
+            />
+            <a
+              href="#"
+              className="flex justify-center items-center font-bold text-4xl"
+            >
+              Drama
+            </a>
+          </div>
           {/* Este div solo se muestra en desktop */}
-          <div className="hidden md:flex gap-10">
-            <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
-              <Image
-                src={dramaImg}
-                fill
-                quality={80}
-                priority={true}
-                alt="drama category"
-                className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
-              />
-              <a
-                href="#"
-                className="flex justify-center items-center font-bold text-4xl"
-              >
-                Drama
-              </a>
-            </div>
+          <div className="hidden lg:flex gap-10">
             <div className="grid relative w-[330px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
               <Image
                 src={scifiImg}
@@ -188,11 +187,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col justify-center items-center mx-auto my-[200px]">
+      <section className="flex flex-col justify-center mx-auto my-[200px] max-w-[1200px]">
         <h3 className="text-3xl font-bold text-center mb-10 underline underline-offset-4">
           Popular reviews
         </h3>
-        <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
+        <div className="flex flex-col gap-5 max-w-[1000px] justify-center">
           {
             //Mapeo el array de reviews
             reviews.map((review) => {
@@ -211,8 +210,6 @@ export default function Home() {
           }
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }

@@ -1,6 +1,12 @@
-const MoviePoster = ({ id, poster, title }) => {
+const MoviePoster = ({ id, poster, title, carousel }) => {
   return (
-    <div className="keen-slider__slide" key={id}>
+    //La props carousel se usa solamente cuando se llama a la libreria keen-slider.
+    <div
+      className={`${
+        carousel ? "keen-slider__slide" : "w-[130px] md:w-[190px]"
+      }`}
+      key={id}
+    >
       <a href="#">
         <img
           className="border border-white rounded-sm"

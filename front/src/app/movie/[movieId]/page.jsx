@@ -24,7 +24,7 @@ const MoviePage = () => {
         </p>
         <MovieActions />
       </div>
-      <article>
+      <article className="p-3">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
           euismod nunc ut mauris rutrum laoreet. Curabitur scelerisque sed nisl

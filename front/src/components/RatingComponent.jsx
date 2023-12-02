@@ -1,28 +1,31 @@
 "use client";
 import "@/app/globals.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const RatingComponent = () => {
   const [currentRating, setCurrentRating] = useState(0);
-  const highlightStars = (index) => {
-    setCurrentRating(index + 1);
+
+  // Maneja el clic en una estrella
+  const handleStarClick = (value) => {
+    const newRating = value + 1;
+
+    if (newRating !== currentRating) {
+      setCurrentRating(newRating);
+    }
   };
 
-  const handleStarClick = (index) => {
-    setCurrentRating(index + 1);
+  useEffect(() => {
     console.log("Rating seleccionado:", currentRating);
-  };
+  }, [currentRating]);
 
   return (
     <div className="box">
       {[5, 4, 3, 2, 1].map((index) => (
         <span
           key={index}
-          className={`b1 text-4xl bg-clip-text cursor-pointer hover:text-yellow-500 ${
-            index <= currentRating + 1 ? "hover:text-star" : ""
+          className={`b1 text-4xl cursor-pointer ${
+            index <= currentRating ? "text-star" : "text-slate"
           }`}
-          onMouseOver={() => highlightStars(index - 1)}
-          onMouseOut={() => highlightStars(currentRating - 1)}
           onClick={() => handleStarClick(index - 1)}
         >
           &#9733;

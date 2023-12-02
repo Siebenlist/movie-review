@@ -5,8 +5,8 @@ import RatingComponent from "./RatingComponent";
 
 const MovieActions = () => {
   return (
-    <div>
-      <div className="flex gap-5 bg-input p-3 mt-5 rounded-md">
+    <div className="bg-menu rounded-md p-3">
+      <div className="flex justify-center gap-5">
         <div className="w-[50px]">
           <img src={watchlistIcon.src} alt="Watchlist eye icon" />
         </div>

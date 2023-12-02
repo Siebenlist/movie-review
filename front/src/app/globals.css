@@ -28,3 +28,25 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #454b53;
 }
+
+.box {
+  direction: rtl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box span {
+  font-size: 40px;
+  color: #313131;
+  transition: 0.3s all;
+}
+
+.box span:hover,
+.b1:hover ~ span,
+.b2:hover ~ span,
+.b3:hover ~ span,
+.b4:hover ~ span,
+.b5:hover ~ span {
+  color: #eac423;
+}

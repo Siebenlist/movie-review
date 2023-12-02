@@ -45,6 +45,8 @@ module.exports = {
       gray: "#727272",
       logoPrimary: "#A661FF",
       logoSecondary: "#76CEFF",
+      star: "#EAC423",
+      starHover: "#C09F03",
     },
   },
   plugins: [],

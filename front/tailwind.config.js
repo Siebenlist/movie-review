@@ -47,6 +47,7 @@ module.exports = {
       logoSecondary: "#76CEFF",
       star: "#EAC423",
       starHover: "#C09F03",
+      red: "#ec5353",
     },
   },
   plugins: [],

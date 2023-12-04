@@ -5,16 +5,16 @@ import RatingComponent from "./RatingComponent";
 
 const MovieActions = () => {
   return (
-    <div className="bg-menu rounded-md p-3">
-      <div className="flex justify-center gap-5">
-        <div className="w-[50px]">
+    <div className="bg-menu rounded-md p-2 mb-2">
+      <div className="flex justify-center gap-3">
+        <button className="w-[35px]">
           <img src={watchlistIcon.src} alt="Watchlist eye icon" />
-        </div>
-        <div className="w-[50px]">
+        </button>
+        <button className="w-[35px]">
           <img src={favMovieIcon.src} alt="Watchlist eye icon" />
-        </div>
+        </button>
       </div>
-      <div>
+      <div className="text-center">
         <p>Rate this movie</p>
         <RatingComponent />
       </div>

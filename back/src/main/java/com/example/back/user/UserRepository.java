@@ -10,7 +10,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Override
     Optional<User> findById(Integer integer);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
 
     User findUserById(Integer userId);
 }

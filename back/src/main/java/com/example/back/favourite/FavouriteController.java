@@ -15,7 +15,7 @@ public class FavouriteController {
     @PostMapping(value = "/fav")
     public boolean handleFav(@RequestBody FavouriteRequest favouriteRequest) {
         String username = favouriteRequest.getUsername();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findUserByUsername(username);
         if (user == null) {
             return false;
         }

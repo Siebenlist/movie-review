@@ -29,8 +29,8 @@ const DropdownMenu = () => {
         </button>
       </div>
       <ul
-        className={`bg-menu text-white text-center rounded-md ${
-          open ? "block md:absolute" : "hidden"
+        className={`bg-menu text-white text-center rounded-md absolute z-40 ${
+          open ? "block" : "hidden"
         }`}
       >
         <DropdownItem href={"#"} genre={"Horror"} />

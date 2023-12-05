@@ -38,13 +38,12 @@ export default function Home() {
   return (
     <main>
       <div className="h-screen text-center">
-        <div className="absolute top-0 shadow-topM w-full -z-10"></div>
-        <div className="">
+        <div className="absolute top-0 left-0 shadow-topM w-full -z-10"></div>
+        <div>
           <Image
-            className="-z-50"
+            className="absolute object-cover top-0 left-0 -z-50"
             src={bgHero}
             fill
-            style={{ objectFit: "cover" }}
             quality={100}
             alt="Background pattern"
           />

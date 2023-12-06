@@ -12,6 +12,7 @@ const MovieActions = ({ movieId }) => {
 
   const userData = getStorageData();
   const username = userData.user;
+  const token = userData.token;
 
   const handleFav = async () => {
     try {
@@ -19,8 +20,9 @@ const MovieActions = ({ movieId }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ movieId, username }),
+        body: JSON.stringify({ username, movieId }),
       });
 
       if (res.ok) {

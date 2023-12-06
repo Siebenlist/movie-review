@@ -1,5 +1,4 @@
 "use client";
-import { movies } from "../data/movies";
 import { reviews } from "../data/reviews";
 import { useKeenSlider } from "keen-slider/react";
 
@@ -12,28 +11,25 @@ import scifiImg from "../assets/scifi-category.jpg";
 import comedyImg from "../assets/comedy-category.jpg";
 
 import Image from "next/image";
-import "keen-slider/keen-slider.min.css";
-import MoviePoster from "../components/MoviePoster";
+import PopularMovies from "@/components/PopularMovies";
 import ReviewCard from "../components/ReviewCard";
-import NavLogged from "@/components/NavLogged";
-import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [sliderRef] = useKeenSlider({
-    loop: true,
-    renderMode: "performance",
-    rubberband: false,
-    mode: "snap",
-    breakpoints: {
-      "(min-width: 400px)": {
-        slides: { perView: 3.1, spacing: 5 },
-      },
-      "(min-width: 1000px)": {
-        slides: { perView: 4.1, spacing: 10 },
-      },
-    },
-    slides: { perView: 2 },
-  });
+  // const [sliderRef] = useKeenSlider({
+  //   loop: true,
+  //   renderMode: "performance",
+  //   rubberband: false,
+  //   mode: "snap",
+  //   breakpoints: {
+  //     "(min-width: 400px)": {
+  //       slides: { perView: 3.1, spacing: 5 },
+  //     },
+  //     "(min-width: 1000px)": {
+  //       slides: { perView: 4.1, spacing: 10 },
+  //     },
+  //   },
+  //   slides: { perView: 2 },
+  // });
 
   return (
     <main>
@@ -57,26 +53,9 @@ export default function Home() {
 
         <div className="absolute bottom-0 shadow-botM md:shadow-botD w-full -z-10"></div>
 
-        <article className="flex flex-col justify-center items-center text-center w-[90%] md:w-[60%] mx-auto mt-[250px] md:mt-[350px]">
+        <article className="flex flex-col justify-center items-center text-center w-[90%] md:w-[50%] mx-auto mt-[250px] md:mt-[350px]">
           <h2 className="text-xl md:text-3xl font-bold">Popular titles</h2>
-          <div
-            ref={sliderRef}
-            className="keen-slider w-full my-10 animate-fade-in"
-          >
-            {
-              //Mapeo del array de peliculas
-              movies.map((movie) => {
-                return (
-                  <MoviePoster
-                    key={movie.id}
-                    poster={movie.poster}
-                    title={movie.title}
-                    carousel
-                  />
-                );
-              })
-            }
-          </div>
+          <PopularMovies />
         </article>
       </div>
 

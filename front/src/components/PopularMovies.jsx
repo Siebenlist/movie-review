@@ -62,6 +62,7 @@ const PopularMovies = () => {
               key={movie.id}
               poster={movie.poster_path}
               title={movie.title}
+              id={movie.id}
               carousel
             />
           );

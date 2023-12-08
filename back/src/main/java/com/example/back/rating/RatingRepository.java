@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     Integer countByMovieId(Integer movieId);
     Rating findByMovieIdAndUserId(Integer movieId, Integer userId);
-
-    Double avgByMovieId(Integer movieId);
+    
 }

@@ -4,6 +4,7 @@ import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,7 +15,7 @@ public class RatingController {
     private final UserRepository userRepository;
 
     @PostMapping(value = "/rating")
-    public Integer handleRating(RatingRequest ratingRequest) {
+    public Rating handleRating(@RequestBody RatingRequest ratingRequest) {
         User user = userRepository.findUserByUsername(ratingRequest.getUsername());
         if(user == null) {
             return null;
@@ -27,11 +28,11 @@ public class RatingController {
                     .user(user)
                     .build();
             ratingRepository.save(rating);
-            return rating.getRating();
+            return rating;
         } else {
             actualRating.setRating(ratingRequest.getRating());
             ratingRepository.save(actualRating);
-            return actualRating.getRating();
+            return actualRating;
         }
     }
 

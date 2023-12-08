@@ -9,13 +9,13 @@ const MoviePoster = ({ id, poster, title, carousel }) => {
       }`}
       key={id}
     >
-      <Link href={`http://localhost:3000/movie/${id}`}>
+      <a href={`http://localhost:3000/movie/${id}`}>
         <img
           className="border border-white rounded-sm w-full"
           src={`https://image.tmdb.org/t/p/original/${poster}`}
           alt={`${title} poster`}
         />
-      </Link>
+      </a>
     </div>
   );
 };

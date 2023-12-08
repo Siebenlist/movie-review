@@ -15,22 +15,6 @@ import PopularMovies from "@/components/PopularMovies";
 import ReviewCard from "../components/ReviewCard";
 
 export default function Home() {
-  // const [sliderRef] = useKeenSlider({
-  //   loop: true,
-  //   renderMode: "performance",
-  //   rubberband: false,
-  //   mode: "snap",
-  //   breakpoints: {
-  //     "(min-width: 400px)": {
-  //       slides: { perView: 3.1, spacing: 5 },
-  //     },
-  //     "(min-width: 1000px)": {
-  //       slides: { perView: 4.1, spacing: 10 },
-  //     },
-  //   },
-  //   slides: { perView: 2 },
-  // });
-
   return (
     <main>
       <div className="h-screen text-center">

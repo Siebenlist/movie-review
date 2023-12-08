@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const MoviePoster = ({ id, poster, title, carousel }) => {
   return (
     //La props carousel se usa solamente cuando se llama a la libreria keen-slider.
@@ -7,10 +9,10 @@ const MoviePoster = ({ id, poster, title, carousel }) => {
       }`}
       key={id}
     >
-      <a href="#">
+      <a href={`http://localhost:3000/movie/${id}`}>
         <img
-          className="border border-white rounded-sm"
-          src={poster}
+          className="border border-white rounded-sm w-full"
+          src={`https://image.tmdb.org/t/p/original/${poster}`}
           alt={`${title} poster`}
         />
       </a>

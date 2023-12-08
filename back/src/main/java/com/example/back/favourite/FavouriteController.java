@@ -1,37 +1,35 @@
 package com.example.back.favourite;
 
+import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/fav")
 @RequiredArgsConstructor
 public class FavouriteController {
     private final FavouriteRepository favouriteRepository;
     private final UserRepository userRepository;
-    @PostMapping(value = "/add/{movieId}")
-    public void add(@PathVariable("movieId") Integer movieId, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {
-            return;
-        }
-        Favourite favourite = new Favourite();
-        favourite.setMovieId(movieId);
-        favourite.setUser(userRepository.findUserById(userId));
-        favouriteRepository.save(favourite);
 
-    }
-    @PostMapping(value = "/remove/{movieId}")
-    public void remove(@PathVariable("movieId") Integer movieId, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) {
-            return;
+    @PostMapping(value = "/fav")
+    public boolean handleFav(@RequestBody FavouriteRequest favouriteRequest) {
+        String username = favouriteRequest.getUsername();
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            return false;
         }
-        favouriteRepository.deleteByMovieIdAndUserId(movieId, userId);
+        Favourite fav = favouriteRepository.findByMovieIdAndUserId(favouriteRequest.getMovieId(), user.getId());
+        if (fav == null) {
+            Favourite newFav = Favourite.builder()
+                    .movieId(favouriteRequest.getMovieId())
+                    .user(user)
+                    .build();
+            favouriteRepository.save(newFav);
+            return true;
+        }
+        favouriteRepository.delete(fav);
+        return false;
     }
+
 }

@@ -7,11 +7,8 @@ import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Integer> {
-    Optional<Follow> findByFollowerIdAndFollowedId(Integer followerId, Integer followedId);
+    Follow findByFollowerIdAndFollowedId(Integer followerId, Integer followedId);
     Integer countByFollowerId(Integer followerId);
     Integer countByFollowedId(Integer followedId);
-
-    default void deleteByFollowerIdAndFollowedId(Integer followerId, Integer followedId) {
-        findByFollowerIdAndFollowedId(followerId, followedId).ifPresent(this::delete);
-    }
+    void deleteByFollowerIdAndFollowedId(Integer followerId, Integer followedId);
 }

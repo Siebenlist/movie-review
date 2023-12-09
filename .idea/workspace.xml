@@ -55,14 +55,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "rating-avg-create",
+    "git-widget-placeholder": "follow2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
+    "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
@@ -80,9 +80,6 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.back.jwt" />
       <recent name="com.example.back.auth" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\javie\Desktop\PROYECTOS2023\Movie Review\movie-review" />
     </key>
   </component>
   <component name="RunManager">
@@ -125,6 +122,7 @@
       <workItem from="1701992525921" duration="1514000" />
       <workItem from="1702075278764" duration="1557000" />
       <workItem from="1702082635097" duration="3248000" />
+      <workItem from="1702162169474" duration="1204000" />
     </task>
     <servers />
   </component>

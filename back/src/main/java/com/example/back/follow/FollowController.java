@@ -42,7 +42,7 @@ public class FollowController {
                 .build());
     }
 
-    @GetMapping(value = "/follow")
+    @GetMapping(value = "/get")
     public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam Integer followedId) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {

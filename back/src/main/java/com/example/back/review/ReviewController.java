@@ -5,9 +5,8 @@ import com.example.back.rating.RatingRepository;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +33,21 @@ public class ReviewController {
             actualReview.setReview(reviewRequest.getReview());
             reviewRepository.save(actualReview);
             return actualReview;
+        }
+    }
+
+    @GetMapping(value = "/getReview")
+    public ResponseEntity<ReviewResponse> getReview(@RequestParam Integer movieId, @RequestParam String username) {
+        User user = userRepository.findUserByUsername(username);
+        Review review = reviewRepository.findByMovieIdAndUserId(movieId, user.getId());
+        if (review == null) {
+            return ResponseEntity.ok(ReviewResponse.builder()
+                    .id(null)
+                    .build());
+        } else {
+            return ResponseEntity.ok(ReviewResponse.builder()
+                    .id(review.getId())
+                    .build());
         }
     }
 

@@ -57,7 +57,7 @@ const MoviePage = ({ params }) => {
               />
             </span>
           </p>
-          <MovieActions />
+          <MovieActions movieId={params.id} />
         </div>
         <article className="p-3 w-full">
           <h1 className="text-xl md:text-4xl font-bold mb-5">
@@ -70,7 +70,7 @@ const MoviePage = ({ params }) => {
         </article>
       </div>
       <div>
-        <div className="w-[1200px]">
+        <div className="max-w-[1200px]">
           <p className="text-slate uppercase">Popular reviews</p>
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>

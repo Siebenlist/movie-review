@@ -8,19 +8,17 @@ import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
 
 const MovieActions = ({ movieId }) => {
-  const [movieFaved, setMovieFaved] = useState(null);
+  const [movieFaved, setMovieFaved] = useState({id: null});
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
-
-
-
 
 useEffect(() => {
  
   console.log("info para favoritear: ",userData.user,movieId,userData.token)
   console.log("asda", userData.user)
+  console.log("Movie faved es:", movieFaved)
 
 
-}, []);
+}, [movieFaved]);
 
 
 
@@ -32,11 +30,14 @@ useEffect(() => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userData.token}`,
         },
-        body: JSON.stringify({ username: userData.user, movieId: 2 }),
+        body: JSON.stringify({ username: userData.user, movieId: movieId }),
       });
 
       if (res.ok) {
+        const data = await res.json();
+        console.log('data', data)
         console.log("Uusario", userData.user);
+        setMovieFaved(data)
       }
     } catch {
       console.log("Error al agregar a favoritos")
@@ -48,15 +49,11 @@ useEffect(() => {
   return (
     <div className="bg-menu rounded-md p-2 mb-2">
       <div className="flex justify-center gap-3">
-        <button className="w-[35px]">
-          <img src={watchlistIcon.src} alt="Watchlist eye icon" />
+        <button className="w-[35px] text-3xl text-slate">
+          &#128065;
         </button>
-        <button className="w-[35px]">
-          <img
-            onClick={handleFav}
-            src={favMovieIcon.src}
-            alt="Watchlist eye icon"
-          />
+        <button onClick={handleFav} className={`w-[35px] text-2xl duration-200 hover:text-[28px] ${movieFaved.id == null ? "text-slate" : "text-red"}`}>
+          &#10084;
         </button>
       </div>
       <div className="text-center">

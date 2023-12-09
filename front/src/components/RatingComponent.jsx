@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 
 const RatingComponent = () => {
   const [currentRating, setCurrentRating] = useState(0);
-  const [isRated, setIsRated] = useState(false);
 
   // Maneja el clic en una estrella
   const handleStarClick = (value) => {
@@ -20,7 +19,6 @@ const RatingComponent = () => {
   //Maneja el reseteo del rating
   const handleResetRating = () => {
     setCurrentRating(0);
-    setIsRated(false);
   };
 
   useEffect(() => {
@@ -41,16 +39,6 @@ const RatingComponent = () => {
             &#9733;
           </span>
         ))}
-      </div>
-      <div className="">
-        <button
-          className={`items-start text-xl font-bold duration-100 hover:text-red ${
-            isRated ? "inline-flex" : "hidden"
-          }`}
-          onClick={handleResetRating}
-        >
-          x
-        </button>
       </div>
     </div>
   );

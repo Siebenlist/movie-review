@@ -2,25 +2,38 @@
 
 import { useEffect, useState } from "react";
 import React from "react";
-import watchlistIcon from "@/assets/watchlistIcon.svg";
-import favMovieIcon from "@/assets/favMovieIcon.svg";
 import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
 
 const MovieActions = ({ movieId }) => {
   const [movieFaved, setMovieFaved] = useState({id: null});
+  const [favCheck, setFavCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
 
-useEffect(() => {
- 
-  console.log("info para favoritear: ",userData.user,movieId,userData.token)
-  console.log("asda", userData.user)
-  console.log("Movie faved es:", movieFaved)
+  const checkFav = async () => {
+    try{
+      const res = await fetch(`http://localhost:8080/faved?username=${userData.user}&movieId=${movieId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData.token}`,
+        },
+      })
 
+      if(res.ok){
+        const favData = await res.json();
+        console.log("Una locura lo tuyo", favData)
+        if(favData.id !== null){
+          setFavCheck(true);
+        } else {
+          setFavCheck(false);
+        }
 
-}, [movieFaved]);
-
-
+      }
+    } catch {
+      console.log("Error papito")
+    }
+  }
 
   const handleFav = async () => {
     try {
@@ -46,13 +59,22 @@ useEffect(() => {
     }
   };
 
+  useEffect(() => {
+ 
+    console.log("info para favoritear: ",userData.user,movieId,userData.token)
+    console.log("asda", userData.user)
+    console.log("Movie faved es:", movieFaved)
+
+    checkFav()
+  }, [movieFaved]);
+
   return (
     <div className="bg-menu rounded-md p-2 mb-2">
       <div className="flex justify-center gap-3">
-        <button className="w-[35px] text-3xl text-slate">
+        <button className="w-[35px] text-3xl text-slate decoration-dashed">
           &#128065;
         </button>
-        <button onClick={handleFav} className={`w-[35px] text-2xl duration-200 hover:text-[28px] ${movieFaved.id == null ? "text-slate" : "text-red"}`}>
+        <button onClick={handleFav} className={`w-[35px] text-2xl duration-200 hover:text-[28px] ${favCheck? "text-red" : "text-slate"}`}>
           &#10084;
         </button>
       </div>

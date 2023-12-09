@@ -8,41 +8,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/follow")
 @RequiredArgsConstructor
 public class FollowController {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<FollowResponse> add(@RequestBody FollowRequest followRequest) {
-        User follower = userRepository.findUserByUsername(followRequest.getUsername());
-        User followed = userRepository.findUserById(followRequest.getFollowedId());
-        if (follower == null) {
-            return null;
-        }
-        Follow follow = new Follow();
-        follow.setFollowed(followed);
-        follow.setFollower(follower);
-        followRepository.save(follow);
-        return ResponseEntity.ok(FollowResponse.builder()
-                .id(follow.getId())
-                .build());
-    }
-
-    @PostMapping(value = "/remove")
-    public ResponseEntity<FollowResponse> remove(@RequestBody FollowRequest followRequest) {
+    @PostMapping(value = "/follow")
+    public ResponseEntity<FollowResponse> handleFollow(@RequestBody FollowRequest followRequest) {
         User user = userRepository.findUserByUsername(followRequest.getUsername());
-        if (user == null) {
+        User followed = userRepository.findUserById(followRequest.getFollowedId());
+        if (user == null || followed == null) {
             return null;
         }
-        followRepository.deleteByFollowerIdAndFollowedId(user.getId(), followRequest.getFollowedId());
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followed.getId());
+        if (follow == null) {
+            Follow newFollow = Follow.builder()
+                    .follower(user)
+                    .followed(followed)
+                    .build();
+            followRepository.save(newFollow);
+            return ResponseEntity.ok(FollowResponse.builder()
+                    .id(newFollow.getId())
+                    .build());
+        }
+        followRepository.delete(follow);
         return ResponseEntity.ok(FollowResponse.builder()
                 .id(null)
                 .build());
+
     }
 
-    @GetMapping(value = "/get")
+    @GetMapping(value = "/getFollow")
     public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam Integer followedId) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {

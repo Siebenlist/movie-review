@@ -39,12 +39,12 @@ public class FavouriteController {
 
     //Get para devolver la pelicula si esta fav o no
     @GetMapping(value = "/faved")
-    public ResponseEntity<FavouriteResponse> getFav(@RequestBody FavouriteRequest request) {
-        User user = userRepository.findUserByUsername(request.getUsername());
+    public ResponseEntity<FavouriteResponse> getFav(@RequestParam String username, @RequestParam Integer movieId) {
+        User user = userRepository.findUserByUsername(username);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        Favourite fav = favouriteRepository.findByMovieIdAndUserId(request.getMovieId(), user.getId());
+        Favourite fav = favouriteRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (fav == null) {
             return ResponseEntity.ok(FavouriteResponse.builder()
                     .id(null)

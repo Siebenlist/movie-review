@@ -5,8 +5,6 @@ import ReviewCard from "@/components/ReviewCard";
 import { reviews } from "@/data/reviews";
 import { useState, useEffect } from "react";
 
-// const loadMovie = async (id) => {
-
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
 

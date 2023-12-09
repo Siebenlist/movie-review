@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import watchlistIcon from "@/assets/watchlistIcon.svg";
 import favMovieIcon from "@/assets/favMovieIcon.svg";
@@ -9,10 +9,20 @@ import { getStorageData } from "@/controllers/localStorageController";
 
 const MovieActions = ({ movieId }) => {
   const [movieFaved, setMovieFaved] = useState(null);
+  const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
 
-  const userData = getStorageData();
-  const username = userData.user;
-  const token = userData.token;
+
+
+
+useEffect(() => {
+ 
+  console.log("info para favoritear: ",userData.user,movieId,userData.token)
+  console.log("asda", userData.user)
+
+
+}, []);
+
+
 
   const handleFav = async () => {
     try {
@@ -20,15 +30,17 @@ const MovieActions = ({ movieId }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData.token}`,
         },
-        body: JSON.stringify({ username, movieId }),
+        body: JSON.stringify({ username: userData.user, movieId: 2 }),
       });
 
       if (res.ok) {
-        console.log("Uusario", username);
+        console.log("Uusario", userData.user);
       }
     } catch {
+      console.log("Error al agregar a favoritos")
+      console.log(userData.token, {username: userData.user, movieId: 2})
       alert("Erro ao adicionar a lista de favoritos");
     }
   };

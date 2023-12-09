@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RatingResponse {
     private Integer id;
+    private Integer rating;
 }

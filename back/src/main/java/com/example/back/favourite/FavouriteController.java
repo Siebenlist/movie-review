@@ -2,8 +2,9 @@ package com.example.back.favourite;
 
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,11 +14,11 @@ public class FavouriteController {
     private final UserRepository userRepository;
 
     @PostMapping(value = "/fav")
-    public boolean handleFav(@RequestBody FavouriteRequest favouriteRequest) {
+    public ResponseEntity<FavouriteResponse> handleFav(@RequestBody FavouriteRequest favouriteRequest) {
         String username = favouriteRequest.getUsername();
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return false;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Favourite fav = favouriteRepository.findByMovieIdAndUserId(favouriteRequest.getMovieId(), user.getId());
         if (fav == null) {
@@ -26,10 +27,14 @@ public class FavouriteController {
                     .user(user)
                     .build();
             favouriteRepository.save(newFav);
-            return true;
+            return ResponseEntity.ok(FavouriteResponse.builder()
+                    .id(newFav.getId())
+                    .build());
         }
         favouriteRepository.delete(fav);
-        return false;
+        return ResponseEntity.ok(FavouriteResponse.builder()
+                .id(null)
+                .build());
     }
 
 }

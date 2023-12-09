@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6eea36a6-3fee-4536-a0b1-6b10e01a872a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/follow/FollowRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/follow/FollowResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/follow/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/follow/FollowController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -121,7 +118,7 @@
       <workItem from="1701992525921" duration="1514000" />
       <workItem from="1702075278764" duration="1557000" />
       <workItem from="1702082635097" duration="3248000" />
-      <workItem from="1702162169474" duration="744000" />
+      <workItem from="1702162169474" duration="1204000" />
     </task>
     <servers />
   </component>

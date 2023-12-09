@@ -41,4 +41,21 @@ public class FollowController {
                 .id(null)
                 .build());
     }
+
+    @GetMapping(value = "/follow")
+    public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam Integer followedId) {
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            return null;
+        }
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followedId);
+        if (follow == null) {
+            return ResponseEntity.ok(FollowResponse.builder()
+                    .id(null)
+                    .build());
+        }
+        return ResponseEntity.ok(FollowResponse.builder()
+                .id(follow.getId())
+                .build());
+    }
 }

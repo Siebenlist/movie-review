@@ -1,34 +1,79 @@
 "use client";
 import "@/app/globals.css";
 import React, { useState, useEffect } from "react";
+import { getStorageData } from "@/controllers/localStorageController";
 
-const RatingComponent = () => {
+const RatingComponent = ({ movieId }) => {
   const [currentRating, setCurrentRating] = useState(0);
+  const userData = JSON.parse(getStorageData());
 
   // Maneja el clic en una estrella
-  const handleStarClick = (value) => {
-    const newRating = value + 1;
+  // const handleStarClick = (value) => {
+  //   const newRating = value + 1;
 
-    //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
-    if (newRating !== currentRating) {
-      setCurrentRating(newRating);
-      setIsRated(true);
+  //   //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
+  //   if (newRating !== currentRating) {
+  //     setCurrentRating(newRating);
+  //   }
+  // };
+
+  const getRating = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        "content-type": "Application/json",
+        Authorization: `Bearer ${userData.token},`,
+      },
+    };
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${movieId}`,
+        options
+      );
+      if (res.ok) {
+        const ratingData = await res.json();
+        console.log("aca esta el coso del get del rating", ratingData);
+      }
+    } catch {
+      console.log("Error al obtener el rating");
     }
   };
 
-  //Maneja el reseteo del rating
-  const handleResetRating = () => {
-    setCurrentRating(0);
+  const submitRating = async () => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+      body: JSON.stringify({
+        movieId: movieId,
+        rating: 3,
+        username: userData.user,
+      }),
+    };
+
+    try {
+      const res = await fetch("http://localhost:8080/rating", options);
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+      }
+    } catch {
+      console.log("una cagada tu fetcheo");
+    }
   };
 
   useEffect(() => {
     console.log("Rating seleccionado:", currentRating);
+    submitRating();
   }, [currentRating]);
 
   return (
     <div className="box flex">
       <div>
-        {[5, 4, 3, 2, 1].map((index) => (
+        {/* {[5, 4, 3, 2, 1].map((index) => (
           <span
             key={index}
             className={`b1 text-4xl cursor-pointer ${
@@ -38,7 +83,12 @@ const RatingComponent = () => {
           >
             &#9733;
           </span>
-        ))}
+        ))} */}
+        <span onClick={() => setCurrentRating(1)}>&#9733;</span>
+        <span onClick={() => setCurrentRating(2)}>&#9733;</span>
+        <span onClick={() => setCurrentRating(3)}>&#9733;</span>
+        <span onClick={() => setCurrentRating(4)}>&#9733;</span>
+        <span onClick={() => setCurrentRating(5)}>&#9733;</span>
       </div>
     </div>
   );

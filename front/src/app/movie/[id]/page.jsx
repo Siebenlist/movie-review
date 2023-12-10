@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
 
+  //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
   const fetcheo = async (id) => {
     const options = {
       method: "GET",

@@ -1,15 +1,46 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropdownItem from "./DropdownItem";
 import dropdownArrow from "../assets/dropdownArrow.svg";
 import Image from "next/image";
 
 const DropdownMenu = () => {
   const [open, setOpen] = useState(false);
+  const [movieGenres, setMovieGenres] = useState();
 
   const handleDropdown = () => {
     setOpen(!open);
   };
+
+  const genreFetch = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNmNhYTNjZDBlZmRjODI2ZWRhNWVkNWYyMWZlMDllMiIsInN1YiI6IjYzNmY4YjBiZDdmYmRhMDA5MDVkOTJjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0IbstPtIVklqlKXghzWLmq2AGigTFlb2cCWbPEZhf0M",
+      },
+    };
+
+    try {
+      const res = await fetch(
+        "https://api.themoviedb.org/3/genre/movie/list?language=en",
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setMovieGenres(data);
+      }
+    } catch {
+      console.log("error papucho");
+    }
+  };
+
+  useEffect(() => {
+    genreFetch();
+  }, [movieGenres]);
+
+  if (!movieGenres) return <div>Movies</div>;
 
   return (
     <div>
@@ -33,11 +64,15 @@ const DropdownMenu = () => {
           open ? "block" : "hidden"
         }`}
       >
-        <DropdownItem href={"#"} genre={"Horror"} />
-        <DropdownItem href={"#"} genre={"Comedy"} />
-        <DropdownItem href={"#"} genre={"Thriller"} />
-        <DropdownItem href={"#"} genre={"Drama"} />
-        <DropdownItem href={"#"} genre={"Sci-fi"} />
+        {movieGenres.genres.map((genre) => {
+          return (
+            <DropdownItem
+              key={genre.id}
+              endpoint={genre.id}
+              genre={genre.name}
+            />
+          );
+        })}
       </ul>
     </div>
   );

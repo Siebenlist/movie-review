@@ -4,18 +4,18 @@ import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
 
 const RatingComponent = ({ movieId }) => {
-  const [currentRating, setCurrentRating] = useState(0);
+  const [currentRating, setCurrentRating] = useState();
   const userData = JSON.parse(getStorageData());
 
-  // Maneja el clic en una estrella
-  // const handleStarClick = (value) => {
-  //   const newRating = value + 1;
+  //Maneja el clic en una estrella
+  const handleStarClick = (value) => {
+    const newRating = value + 1;
 
-  //   //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
-  //   if (newRating !== currentRating) {
-  //     setCurrentRating(newRating);
-  //   }
-  // };
+    //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
+    if (newRating !== currentRating) {
+      setCurrentRating(newRating);
+    }
+  };
 
   const getRating = async () => {
     const options = {
@@ -33,6 +33,7 @@ const RatingComponent = ({ movieId }) => {
       );
       if (res.ok) {
         const ratingData = await res.json();
+        setCurrentRating(ratingData.rating);
         console.log("aca esta el coso del get del rating", ratingData);
       }
     } catch {
@@ -49,7 +50,7 @@ const RatingComponent = ({ movieId }) => {
       },
       body: JSON.stringify({
         movieId: movieId,
-        rating: 3,
+        rating: currentRating,
         username: userData.user,
       }),
     };
@@ -66,14 +67,14 @@ const RatingComponent = ({ movieId }) => {
   };
 
   useEffect(() => {
-    console.log("Rating seleccionado:", currentRating);
     submitRating();
+    console.log("Rating seleccionado:", currentRating);
   }, [currentRating]);
 
   return (
     <div className="box flex">
       <div>
-        {/* {[5, 4, 3, 2, 1].map((index) => (
+        {[5, 4, 3, 2, 1].map((index) => (
           <span
             key={index}
             className={`b1 text-4xl cursor-pointer ${
@@ -83,12 +84,7 @@ const RatingComponent = ({ movieId }) => {
           >
             &#9733;
           </span>
-        ))} */}
-        <span onClick={() => setCurrentRating(1)}>&#9733;</span>
-        <span onClick={() => setCurrentRating(2)}>&#9733;</span>
-        <span onClick={() => setCurrentRating(3)}>&#9733;</span>
-        <span onClick={() => setCurrentRating(4)}>&#9733;</span>
-        <span onClick={() => setCurrentRating(5)}>&#9733;</span>
+        ))}
       </div>
     </div>
   );

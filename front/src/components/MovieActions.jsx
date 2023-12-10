@@ -7,6 +7,7 @@ import { getStorageData } from "@/controllers/localStorageController";
 
 const MovieActions = ({ movieId }) => {
   const [movieFaved, setMovieFaved] = useState({ id: null });
+  const [movieParamsId, setMovieParamsId] = useState();
   const [favCheck, setFavCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
 
@@ -72,6 +73,7 @@ const MovieActions = ({ movieId }) => {
     console.log("Movie faved es:", movieFaved);
 
     checkFav();
+    setMovieParamsId(movieId);
   }, [movieFaved]);
 
   return (
@@ -91,7 +93,7 @@ const MovieActions = ({ movieId }) => {
       </div>
       <div className="text-center">
         <p>Rate this movie</p>
-        <RatingComponent movieId={movieId} />
+        <RatingComponent movieId={movieParamsId} />
       </div>
     </div>
   );

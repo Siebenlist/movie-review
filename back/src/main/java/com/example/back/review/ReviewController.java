@@ -17,10 +17,13 @@ public class ReviewController {
     private final RatingRepository ratingRepository;
 
     @PostMapping(value = "/review")
-    public Review handleReview(@RequestBody ReviewRequest reviewRequest) {
+    public ResponseEntity<ReviewResponse> handleReview(@RequestBody ReviewRequest reviewRequest) {
         User user = userRepository.findUserByUsername(reviewRequest.getUsername());
         Review actualReview = reviewRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
         Rating actualRating = ratingRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
+        if(actualRating == null) {
+            return null;
+        }
         if (actualReview == null) {
             Review review = Review.builder()
                     .movieId(reviewRequest.getMovieId())
@@ -29,11 +32,15 @@ public class ReviewController {
                     .user(user)
                     .build();
             reviewRepository.save(review);
-            return review;
+            return ResponseEntity.ok(ReviewResponse.builder()
+                    .id(review.getId())
+                    .build());
         } else {
             actualReview.setReview(reviewRequest.getReview());
             reviewRepository.save(actualReview);
-            return actualReview;
+            return ResponseEntity.ok(ReviewResponse.builder()
+                    .id(actualReview.getId())
+                    .build());
         }
     }
 

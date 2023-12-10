@@ -43,7 +43,7 @@ public class RatingController {
         }
     }
 
-    @GetMapping(value = "/get/personalRating")
+    @GetMapping(value = "/getPersonalRating")
     public ResponseEntity<RatingResponse> getRating(@RequestParam String username, @RequestParam Integer movieId) {
         User user = userRepository.findUserByUsername(username);
         if(user == null) {

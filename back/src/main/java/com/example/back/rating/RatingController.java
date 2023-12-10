@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 
 @RequiredArgsConstructor
@@ -62,6 +64,31 @@ public class RatingController {
                 .id(rating.getId())
                 .rating(rating.getRating())
                 .build());
+    }
+
+    @GetMapping(value = "/getGlobalRating")
+    public ResponseEntity<GlobalRatingResponse> getGlobalRating(@RequestParam Integer movieId) {
+        List<Rating> ratings = ratingRepository.findAllByMovieId(movieId);
+        //System.out.println(ratings);
+        if (ratings.isEmpty()) {
+            return ResponseEntity.ok(GlobalRatingResponse.builder()
+                    .movieId(movieId)
+                    .globalRating(0.0)
+                    .numberOfRatings(0)
+                    .build());
+        }else{
+            int numberOfRatings = ratings.size();
+            Double globalRating = 0.0;
+            for (Rating rating : ratings) {
+                globalRating += rating.getRating();
+            }
+            globalRating = globalRating / numberOfRatings;
+            return ResponseEntity.ok(GlobalRatingResponse.builder()
+                    .movieId(movieId)
+                    .globalRating(globalRating)
+                    .numberOfRatings(numberOfRatings)
+                    .build());
+        }
     }
 
 

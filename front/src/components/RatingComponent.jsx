@@ -16,11 +16,6 @@ const RatingComponent = () => {
     }
   };
 
-  //Maneja el reseteo del rating
-  const handleResetRating = () => {
-    setCurrentRating(0);
-  };
-
   useEffect(() => {
     console.log("Rating seleccionado:", currentRating);
   }, [currentRating]);

@@ -8,16 +8,17 @@ const RatingComponent = ({ movieId }) => {
   const userData = JSON.parse(getStorageData());
 
   //Maneja el clic en una estrella
-  const handleStarClick = (value) => {
+  const handleStarClick = async (value) => {
     const newRating = value + 1;
 
     //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
     if (newRating !== currentRating) {
       setCurrentRating(newRating);
+      await submitRating(newRating);
     }
   };
 
-  const getRating = async () => {
+  const getRating = async (movie_id) => {
     const options = {
       method: "GET",
       headers: {
@@ -28,7 +29,7 @@ const RatingComponent = ({ movieId }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${movieId}`,
+        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${movie_id}`,
         options
       );
       if (res.ok) {
@@ -41,7 +42,7 @@ const RatingComponent = ({ movieId }) => {
     }
   };
 
-  const submitRating = async () => {
+  const submitRating = async (rating) => {
     const options = {
       method: "POST",
       headers: {
@@ -50,7 +51,7 @@ const RatingComponent = ({ movieId }) => {
       },
       body: JSON.stringify({
         movieId: movieId,
-        rating: currentRating,
+        rating: rating,
         username: userData.user,
       }),
     };
@@ -59,7 +60,7 @@ const RatingComponent = ({ movieId }) => {
       const res = await fetch("http://localhost:8080/rating", options);
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
+        getRating(movieId);
       }
     } catch {
       console.log("una cagada tu fetcheo");
@@ -67,24 +68,25 @@ const RatingComponent = ({ movieId }) => {
   };
 
   useEffect(() => {
-    submitRating();
-    console.log("Rating seleccionado:", currentRating);
-  }, [currentRating]);
+    getRating(movieId);
+  }, [movieId]);
 
   return (
     <div className="box flex">
       <div>
-        {[5, 4, 3, 2, 1].map((index) => (
-          <span
-            key={index}
-            className={`b1 text-4xl cursor-pointer ${
-              index <= currentRating ? "text-star" : "text-slate"
-            }`}
-            onClick={() => handleStarClick(index - 1)}
-          >
-            &#9733;
-          </span>
-        ))}
+        {[5, 4, 3, 2, 1].map((index) => {
+          return (
+            <span
+              key={index}
+              className={`b1 text-4xl cursor-pointer ${
+                index <= currentRating ? "text-star" : "text-slate"
+              }`}
+              onClick={() => handleStarClick(index - 1)}
+            >
+              &#9733;
+            </span>
+          );
+        })}
       </div>
     </div>
   );

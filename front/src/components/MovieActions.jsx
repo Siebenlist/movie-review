@@ -7,7 +7,7 @@ import { getStorageData } from "@/controllers/localStorageController";
 
 const MovieActions = ({ movieId }) => {
   const [movieFaved, setMovieFaved] = useState({ id: null });
-  const [movieParamsId, setMovieParamsId] = useState();
+  const [movieParamsId, setMovieParamsId] = useState(movieId);
   const [favCheck, setFavCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
 
@@ -74,7 +74,7 @@ const MovieActions = ({ movieId }) => {
 
     checkFav();
     setMovieParamsId(movieId);
-  }, [movieFaved]);
+  }, [movieFaved, movieId]);
 
   return (
     <div className="bg-menu rounded-md p-2 mb-2">

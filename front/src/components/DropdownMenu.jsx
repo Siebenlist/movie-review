@@ -38,9 +38,21 @@ const DropdownMenu = () => {
 
   useEffect(() => {
     genreFetch();
-  }, [movieGenres]);
+  }, []);
 
-  if (!movieGenres) return <div>Movies</div>;
+  if (!movieGenres)
+    return (
+      <div className="inline-flex items-center cursor-pointer">
+        Movies{" "}
+        <Image
+          src={dropdownArrow}
+          width={20}
+          height={20}
+          alt="dropdown toggle open"
+          className={`duration-200 ${open ? "rotate-90" : "rotate-0"}`}
+        />
+      </div>
+    );
 
   return (
     <div>

@@ -2,7 +2,6 @@ package com.example.back.follow;
 
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,14 +63,14 @@ public class FollowController {
         }
         List<Follow> followerList = followRepository.findAllByFollowerId(user.getId());
         List<Follow> followedList = followRepository.findAllByFollowedId(user.getId());
-        if(followerList == null) {
+        if (followerList == null) {
             return ResponseEntity.ok(FollowCountResponse.builder()
                     .followerCount(0)
                     .followedCount(followedList.size())
                     .followerList(null)
                     .followedList(followedList)
                     .build());
-        }else if(followedList == null) {
+        } else if (followedList == null) {
             return ResponseEntity.ok(FollowCountResponse.builder()
                     .followerCount(followerList.size())
                     .followedCount(0)
@@ -79,6 +78,7 @@ public class FollowController {
                     .followedList(null)
                     .build());
 
+        }
         return ResponseEntity.ok(FollowCountResponse.builder()
                 .followerCount(followerList.size())
                 .followedCount(followedList.size())
@@ -86,5 +86,4 @@ public class FollowController {
                 .followedList(followedList)
                 .build());
     }
-
 }

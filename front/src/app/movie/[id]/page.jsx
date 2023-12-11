@@ -8,7 +8,13 @@ import { useState, useEffect } from "react";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
-  const [globalData, setGlobalData] = useState({});
+  const [globalData, setGlobalData] = useState({
+    movieId: null,
+    globalRating: null,
+    numberOfRatings: null,
+  });
+  const [globalRating, setGlobalRating] = useState(null);
+  const [numberOfRatings, setNumberOfRatings] = useState(null);
   const userData = JSON.parse(getStorageData());
 
   const popularityFetch = async (id) => {
@@ -22,12 +28,16 @@ const MoviePage = ({ params }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/getGlobalRating?movieId=854648`,
+        `http://localhost:8080/getGlobalRating?movieId=${id}`,
         options
       );
       const data = await response.json();
       console.log("aca esta la data popular ", data);
-      setGlobalData(data);
+      const rating = data.globalRating;
+      const numOfRating = data.numberOfRatings;
+      // setGlobalData(data);
+      setGlobalRating(rating);
+      setNumberOfRatings(numOfRating);
     } catch {
       console.log("error");
     }
@@ -59,7 +69,7 @@ const MoviePage = ({ params }) => {
   useEffect(() => {
     fetcheo(params.id);
     popularityFetch(params.id);
-  }, [params.id, globalData]);
+  }, [globalRating]);
 
   if (!movieData) return <div>Loading...</div>;
 
@@ -74,7 +84,7 @@ const MoviePage = ({ params }) => {
           <p>
             Average rating:{" "}
             <span className="inline-flex items-center">
-              {globalData.globalRating}/5{" "}
+              {globalRating}/5{" "}
               <img
                 src={reviewStar.src}
                 alt="Review star"
@@ -82,7 +92,7 @@ const MoviePage = ({ params }) => {
               />
             </span>
           </p>
-          <p>This movie has been rated {globalData.numberOfRatings} times</p>
+          <p>This movie has been rated {numberOfRatings} times</p>
           <MovieActions movieId={params.id} />
         </div>
         <article className="p-3 w-full">
@@ -104,6 +114,7 @@ const MoviePage = ({ params }) => {
           {reviews.map((review) => {
             return (
               <ReviewCard
+                key={review.id}
                 id={review.id}
                 movie={review.movie}
                 pfp={review.pfp}

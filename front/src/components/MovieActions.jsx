@@ -74,7 +74,7 @@ const MovieActions = ({ movieId }) => {
 
     checkFav();
     setMovieParamsId(movieId);
-  }, [movieFaved, movieId]);
+  }, [movieFaved]);
 
   return (
     <div className="bg-menu rounded-md p-2 mb-2">

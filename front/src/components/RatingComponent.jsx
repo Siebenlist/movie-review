@@ -2,9 +2,10 @@
 import "@/app/globals.css";
 import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
+import Router from "next/navigation";
 
 const RatingComponent = ({ movieId }) => {
-  const [currentRating, setCurrentRating] = useState();
+  const [currentRating, setCurrentRating] = useState(null);
   const userData = JSON.parse(getStorageData());
 
   //Maneja el clic en una estrella
@@ -15,6 +16,15 @@ const RatingComponent = ({ movieId }) => {
     if (newRating !== currentRating) {
       setCurrentRating(newRating);
       await submitRating(newRating);
+    }
+  };
+
+  const redirigir = () => {
+    if (currentRating !== null) {
+      // Obtén la URL deseada (ajústala según tus necesidades)
+      const url = `https://localhost:3000/movie/${movieId}/review`;
+      // Redirige a la URL
+      Router.redirect(url);
     }
   };
 
@@ -69,10 +79,16 @@ const RatingComponent = ({ movieId }) => {
 
   useEffect(() => {
     getRating(movieId);
-  }, [movieId]);
+  }, []);
+
+  useEffect(() => {
+    if (currentRating !== null) {
+      submitRating(currentRating);
+    }
+  }, [currentRating]);
 
   return (
-    <div className="box flex">
+    <div className="box flex flex-col">
       <div>
         {[5, 4, 3, 2, 1].map((index) => {
           return (
@@ -88,6 +104,14 @@ const RatingComponent = ({ movieId }) => {
           );
         })}
       </div>
+      <button
+        href={`${movieId}/review`}
+        disabled={currentRating === null}
+        className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
+        onClick={redirigir}
+      >
+        Make a review
+      </button>
     </div>
   );
 };

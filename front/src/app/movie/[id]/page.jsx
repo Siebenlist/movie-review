@@ -2,11 +2,36 @@
 import reviewStar from "@/assets/reviewStar.svg";
 import MovieActions from "@/components/MovieActions";
 import ReviewCard from "@/components/ReviewCard";
+import { getStorageData } from "@/controllers/localStorageController";
 import { reviews } from "@/data/reviews";
 import { useState, useEffect } from "react";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
+  const [globalData, setGlobalData] = useState({});
+  const userData = JSON.parse(getStorageData());
+
+  const popularityFetch = async (id) => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/getGlobalRating?movieId=854648`,
+        options
+      );
+      const data = await response.json();
+      console.log("aca esta la data popular ", data);
+      setGlobalData(data);
+    } catch {
+      console.log("error");
+    }
+  };
 
   //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
   const fetcheo = async (id) => {
@@ -33,7 +58,8 @@ const MoviePage = ({ params }) => {
 
   useEffect(() => {
     fetcheo(params.id);
-  }, [params.id]);
+    popularityFetch(params.id);
+  }, [params.id, globalData]);
 
   if (!movieData) return <div>Loading...</div>;
 
@@ -48,7 +74,7 @@ const MoviePage = ({ params }) => {
           <p>
             Average rating:{" "}
             <span className="inline-flex items-center">
-              4.3/5{" "}
+              {globalData.globalRating}/5{" "}
               <img
                 src={reviewStar.src}
                 alt="Review star"
@@ -56,6 +82,7 @@ const MoviePage = ({ params }) => {
               />
             </span>
           </p>
+          <p>This movie has been rated {globalData.numberOfRatings} times</p>
           <MovieActions movieId={params.id} />
         </div>
         <article className="p-3 w-full">

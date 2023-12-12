@@ -12,7 +12,6 @@ const SessionContextProvider = ({ children }) => {
     const userData = getStorageData();
     if (userData) {
       setUserLogged(JSON.parse(userData));
-      console.log("The user is logged", userData);
     } else {
       console.log("There is no user");
     }

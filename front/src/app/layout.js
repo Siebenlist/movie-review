@@ -17,7 +17,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <SessionContextProvider>
-        <body className={`${inter.className} relative w-full h-screen`}>
+        <body
+          className={`${inter.className} flex flex-col justify-between relative w-full h-screen`}
+        >
           {user ? <NavLogged /> : <NotLoggedNav />}
 
           {children}

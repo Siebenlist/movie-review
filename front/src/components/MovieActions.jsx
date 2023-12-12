@@ -26,7 +26,6 @@ const MovieActions = ({ movieId }) => {
 
       if (res.ok) {
         const favData = await res.json();
-        console.log("Una locura lo tuyo", favData);
         if (favData.id !== null) {
           setFavCheck(true);
         } else {
@@ -51,27 +50,14 @@ const MovieActions = ({ movieId }) => {
 
       if (res.ok) {
         const data = await res.json();
-        console.log("data", data);
-        console.log("Uusario", userData.user);
         setMovieFaved(data);
       }
     } catch {
-      console.log("Error al agregar a favoritos");
-      console.log(userData.token, { username: userData.user, movieId: 2 });
       alert("Erro ao adicionar a lista de favoritos");
     }
   };
 
   useEffect(() => {
-    console.log(
-      "info para favoritear: ",
-      userData.user,
-      movieId,
-      userData.token
-    );
-    console.log("asda", userData.user);
-    console.log("Movie faved es:", movieFaved);
-
     checkFav();
     setMovieParamsId(movieId);
   }, [movieFaved]);

@@ -3,12 +3,10 @@ import "@/app/globals.css";
 import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
 import Router from "next/navigation";
-import reviewStar from "@/assets/reviewStar.svg";
 
 const RatingComponent = ({ movieId }) => {
   const [currentRating, setCurrentRating] = useState(null);
   const userData = JSON.parse(getStorageData());
-  const [globalRatings, setGlobalRatings] = useState(null);
   const [avgRating, setAvgRating] = useState(null);
 
   const getGlobalRatings = async (movie_id) => {
@@ -28,12 +26,11 @@ const RatingComponent = ({ movieId }) => {
       if (res.ok) {
         const ratingData = await res.json();
         setAvgRating(ratingData.globalRating);
-        console.log("aca esta el coso del get del rating", ratingData);
       }
     } catch {
       console.log("Error al obtener el rating");
     }
-  }
+  };
 
   //Maneja el clic en una estrella
   const handleStarClick = async (value) => {
@@ -41,7 +38,7 @@ const RatingComponent = ({ movieId }) => {
 
     //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
     if (newRating !== currentRating) {
-       await submitRating(newRating);
+      await submitRating(newRating);
     }
   };
 
@@ -71,7 +68,6 @@ const RatingComponent = ({ movieId }) => {
       if (res.ok) {
         const ratingData = await res.json();
         setCurrentRating(ratingData.rating);
-        console.log("aca esta el coso del get del rating", ratingData);
       }
     } catch {
       console.log("Error al obtener el rating");
@@ -96,9 +92,7 @@ const RatingComponent = ({ movieId }) => {
       const res = await fetch("http://localhost:8080/rating", options);
       if (res.ok) {
         const data = await res.json();
-        setCurrentRating(data.rating)
-        console.log("data", data);
-        console.log("posteo rating ok")
+        setCurrentRating(data.rating);
       }
     } catch {
       console.log("posteo rating fail");
@@ -106,39 +100,39 @@ const RatingComponent = ({ movieId }) => {
   };
 
   useEffect(() => {
-    getGlobalRatings(movieId)
+    getGlobalRatings(movieId);
     getRating(movieId);
   }, [currentRating]);
 
   return (
-      <div>
-        <span>Avg. Rating: {avgRating}</span>
-        <div className="box flex flex-col">
-          <div>
-            {[5, 4, 3, 2, 1].map((index) => {
-              return (
-                  <span
-                      key={index}
-                      className={`b1 text-4xl cursor-pointer ${
-                          index <= currentRating ? "text-star" : "text-slate"
-                      }`}
-                      onClick={() => handleStarClick(index - 1)}
-                  >
-              &#9733;
-            </span>
-              );
-            })}
-          </div>
-          <button
-              href={`${movieId}/review`}
-              disabled={currentRating === null}
-              className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
-              onClick={redirigir}
-          >
-            Make a review
-          </button>
+    <div>
+      <span>Avg. Rating: {avgRating}</span>
+      <div className="box flex flex-col">
+        <div>
+          {[5, 4, 3, 2, 1].map((index) => {
+            return (
+              <span
+                key={index}
+                className={`b1 text-4xl cursor-pointer ${
+                  index <= currentRating ? "text-star" : "text-slate"
+                }`}
+                onClick={() => handleStarClick(index - 1)}
+              >
+                &#9733;
+              </span>
+            );
+          })}
         </div>
+        <button
+          href={`${movieId}/review`}
+          disabled={currentRating === null}
+          className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
+          onClick={redirigir}
+        >
+          Make a review
+        </button>
       </div>
+    </div>
   );
 };
 

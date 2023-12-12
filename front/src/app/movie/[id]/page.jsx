@@ -2,13 +2,11 @@
 
 import MovieActions from "@/components/MovieActions";
 import ReviewCard from "@/components/ReviewCard";
-import { getStorageData } from "@/controllers/localStorageController";
 import { reviews } from "@/data/reviews";
 import { useState, useEffect } from "react";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
-  const userData = JSON.parse(getStorageData());
 
   //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
   const fetcheo = async (id) => {
@@ -32,8 +30,9 @@ const MoviePage = ({ params }) => {
       console.error(err);
     }
   };
+
   useEffect(() => {
-    fetcheo(params.id)
+    fetcheo(params.id);
   }, []);
 
   if (!movieData) return <div>Loading...</div>;
@@ -41,14 +40,15 @@ const MoviePage = ({ params }) => {
   return (
     <section className="flex flex-col justify-center items-start mt-10 md:mb-[150px] p-3 mx-auto min-h-screen max-w-[1200px]">
       <div className="flex flex-col justify-center items-start md:flex-row mb-5 md:mb-[150px]">
-        <div className="w-full flex flex-col justify-center items-center mb-10 gap-5">
+        <div className="w-full md:w-[30%] flex flex-col justify-center items-center mb-10 gap-5">
           <img
             src={`https://image.tmdb.org/t/p/original${movieData.poster_path}`}
             className="w-[150px] md:w-[200px] border border-gray p-[1px] rounded-sm"
-           alt={"poster"}/>
+            alt={"poster"}
+          />
           <MovieActions movieId={params.id} />
         </div>
-        <article className="p-3 w-full">
+        <article className="p-3 w-full md:w-[70%]">
           <h1 className="text-xl md:text-4xl font-bold mb-5">
             {movieData.original_title}{" "}
             <span className="text-gray text-2xl">

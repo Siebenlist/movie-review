@@ -13,5 +13,4 @@ public class GlobalRatingResponse {
 
     private Integer movieId;
     private Double globalRating;
-    private Integer numberOfRatings;
 }

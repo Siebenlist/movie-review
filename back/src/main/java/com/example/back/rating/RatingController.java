@@ -18,7 +18,7 @@ public class RatingController {
     private final UserRepository userRepository;
 
     @PostMapping(value = "/rating")
-    public ResponseEntity<RatingResponse> handleRating(@RequestBody RatingRequest ratingRequest) {
+    public ResponseEntity<?> handleRating(@RequestBody RatingRequest ratingRequest) {
         User user = userRepository.findUserByUsername(ratingRequest.getUsername());
         if(user == null) {
             return null;
@@ -74,7 +74,6 @@ public class RatingController {
             return ResponseEntity.ok(GlobalRatingResponse.builder()
                     .movieId(movieId)
                     .globalRating(0.0)
-                    .numberOfRatings(0)
                     .build());
         }else{
             int numberOfRatings = ratings.size();
@@ -86,7 +85,6 @@ public class RatingController {
             return ResponseEntity.ok(GlobalRatingResponse.builder()
                     .movieId(movieId)
                     .globalRating(globalRating)
-                    .numberOfRatings(numberOfRatings)
                     .build());
         }
     }

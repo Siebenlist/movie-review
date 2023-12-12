@@ -1,5 +1,5 @@
 "use client";
-import reviewStar from "@/assets/reviewStar.svg";
+
 import MovieActions from "@/components/MovieActions";
 import ReviewCard from "@/components/ReviewCard";
 import { getStorageData } from "@/controllers/localStorageController";
@@ -8,40 +8,7 @@ import { useState, useEffect } from "react";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
-  const [globalData, setGlobalData] = useState({
-    movieId: null,
-    globalRating: null,
-    numberOfRatings: null,
-  });
-  const [globalRating, setGlobalRating] = useState(null);
-  const [numberOfRatings, setNumberOfRatings] = useState(null);
   const userData = JSON.parse(getStorageData());
-
-  const popularityFetch = async (id) => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
-      },
-    };
-
-    try {
-      const response = await fetch(
-        `http://localhost:8080/getGlobalRating?movieId=${id}`,
-        options
-      );
-      const data = await response.json();
-      console.log("aca esta la data popular ", data);
-      const rating = data.globalRating;
-      const numOfRating = data.numberOfRatings;
-      // setGlobalData(data);
-      setGlobalRating(rating);
-      setNumberOfRatings(numOfRating);
-    } catch {
-      console.log("error");
-    }
-  };
 
   //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
   const fetcheo = async (id) => {
@@ -65,11 +32,9 @@ const MoviePage = ({ params }) => {
       console.error(err);
     }
   };
-
   useEffect(() => {
-    fetcheo(params.id);
-    popularityFetch(params.id);
-  }, [globalRating]);
+    fetcheo(params.id)
+  }, []);
 
   if (!movieData) return <div>Loading...</div>;
 
@@ -80,19 +45,7 @@ const MoviePage = ({ params }) => {
           <img
             src={`https://image.tmdb.org/t/p/original${movieData.poster_path}`}
             className="w-[150px] md:w-[200px] border border-gray p-[1px] rounded-sm"
-          />
-          <p>
-            Average rating:{" "}
-            <span className="inline-flex items-center">
-              {globalRating}/5{" "}
-              <img
-                src={reviewStar.src}
-                alt="Review star"
-                className="w-[15px]"
-              />
-            </span>
-          </p>
-          <p>This movie has been rated {numberOfRatings} times</p>
+           alt={"poster"}/>
           <MovieActions movieId={params.id} />
         </div>
         <article className="p-3 w-full">

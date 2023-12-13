@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
@@ -56,6 +58,23 @@ public class ReviewController {
                     .id(review.getId())
                     .build());
         }
+    }
+
+    @GetMapping(value = "/getListReviewMovie")
+    public ResponseEntity<ListReviewResponse> getListReviewMovie(@RequestParam Integer movieId) {
+        List<Review> reviews = reviewRepository.findAllByMovieId(movieId);
+        return ResponseEntity.ok(ListReviewResponse.builder()
+                .reviews(reviews)
+                .build());
+    }
+
+    @GetMapping(value = "/getListReviewUser")
+    public ResponseEntity<ListReviewResponse> getListReviewUser(@RequestParam String username) {
+        User user = userRepository.findUserByUsername(username);
+        List<Review> reviews = reviewRepository.findAllByUserId(user.getId());
+        return ResponseEntity.ok(ListReviewResponse.builder()
+                .reviews(reviews)
+                .build());
     }
 
 }

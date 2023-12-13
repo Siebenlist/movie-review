@@ -9,6 +9,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     void deleteByMovieIdAndUserId(Integer movieId, Integer userId);
 
     List<Review> findAllByMovieId(Integer movieId);
-
-
+    List<Review> findAllByUserId(Integer id);
 }

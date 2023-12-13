@@ -55,4 +55,16 @@ public class FavouriteController {
                 .build());
     }
 
+    @GetMapping(value = "/favList")
+    public ResponseEntity<FavListResponse> getFavList(@RequestParam String username) {
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        FavListResponse favListResponse = FavListResponse.builder()
+                .favourites(favouriteRepository.findAllByUserId(user.getId()))
+                .build();
+        return ResponseEntity.ok(favListResponse);
+    }
+
 }

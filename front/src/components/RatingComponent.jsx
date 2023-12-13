@@ -1,17 +1,20 @@
 "use client";
 import "@/app/globals.css";
+import hamburgerClose from "../assets/hamburgerClose.svg";
 import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
-import Router from "next/navigation";
-import reviewStar from "@/assets/reviewStar.svg";
+import { useParams } from "next/navigation";
 
-const RatingComponent = ({ movieId }) => {
+const RatingComponent = () => {
   const [currentRating, setCurrentRating] = useState(null);
   const userData = JSON.parse(getStorageData());
-  const [globalRatings, setGlobalRatings] = useState(null);
   const [avgRating, setAvgRating] = useState(null);
+  const [openReview, setOpenReview] = useState(false);
+  const [reviewText, setReviewText] = useState("");
 
-  const getGlobalRatings = async (movie_id) => {
+  const params = useParams();
+
+  const getGlobalRatings = async () => {
     const options = {
       method: "GET",
       headers: {
@@ -22,7 +25,7 @@ const RatingComponent = ({ movieId }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/getGlobalRating?movieId=${movie_id}`,
+        `http://localhost:8080/getGlobalRating?movieId=${params.id}`,
         options
       );
       if (res.ok) {
@@ -33,7 +36,7 @@ const RatingComponent = ({ movieId }) => {
     } catch {
       console.log("Error al obtener el rating");
     }
-  }
+  };
 
   //Maneja el clic en una estrella
   const handleStarClick = async (value) => {
@@ -41,20 +44,42 @@ const RatingComponent = ({ movieId }) => {
 
     //Si el rating actual no es igual al rating nuevo, se actualiza y isRated pasa a ser True
     if (newRating !== currentRating) {
-       await submitRating(newRating);
+      await submitRating(newRating);
     }
   };
 
-  const redirigir = () => {
+  const handleReviewBox = () => {
     if (currentRating !== null) {
-      // Obtén la URL deseada (ajústala según tus necesidades)
-      const url = `https://localhost:3000/movie/${movieId}/review`;
-      // Redirige a la URL
-      Router.redirect(url);
+      setOpenReview(!openReview);
     }
   };
 
-  const getRating = async (movie_id) => {
+  const submitReview = async () => {
+    const options = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+      body: JSON.stringify({
+        movieId: params.id,
+        review: reviewText,
+        rating: currentRating,
+        username: userData.user,
+      }),
+    };
+
+    try {
+      const res = await fetch("http://localhost:8080/review", options);
+      if (res.ok) {
+        setOpenReview(!openReview);
+      }
+    } catch {
+      console.log("Error review");
+    }
+  };
+
+  const getRating = async () => {
     const options = {
       method: "GET",
       headers: {
@@ -65,7 +90,7 @@ const RatingComponent = ({ movieId }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${movie_id}`,
+        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${params.id}`,
         options
       );
       if (res.ok) {
@@ -86,7 +111,7 @@ const RatingComponent = ({ movieId }) => {
         Authorization: `Bearer ${userData.token}`,
       },
       body: JSON.stringify({
-        movieId: movieId,
+        movieId: params.id,
         rating: rating,
         username: userData.user,
       }),
@@ -96,9 +121,9 @@ const RatingComponent = ({ movieId }) => {
       const res = await fetch("http://localhost:8080/rating", options);
       if (res.ok) {
         const data = await res.json();
-        setCurrentRating(data.rating)
+        setCurrentRating(data.rating);
         console.log("data", data);
-        console.log("posteo rating ok")
+        console.log("posteo rating ok");
       }
     } catch {
       console.log("posteo rating fail");
@@ -106,39 +131,75 @@ const RatingComponent = ({ movieId }) => {
   };
 
   useEffect(() => {
-    getGlobalRatings(movieId)
-    getRating(movieId);
+    getGlobalRatings();
+    getRating();
   }, [currentRating]);
 
   return (
+    <div>
       <div>
         <span>Avg. Rating: {avgRating}</span>
         <div className="box flex flex-col">
           <div>
             {[5, 4, 3, 2, 1].map((index) => {
               return (
-                  <span
-                      key={index}
-                      className={`b1 text-4xl cursor-pointer ${
-                          index <= currentRating ? "text-star" : "text-slate"
-                      }`}
-                      onClick={() => handleStarClick(index - 1)}
-                  >
-              &#9733;
-            </span>
+                <span
+                  key={index}
+                  className={`b1 text-4xl cursor-pointer ${
+                    index <= currentRating ? "text-star" : "text-slate"
+                  }`}
+                  onClick={() => handleStarClick(index - 1)}
+                >
+                  &#9733;
+                </span>
               );
             })}
           </div>
           <button
-              href={`${movieId}/review`}
-              disabled={currentRating === null}
-              className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
-              onClick={redirigir}
+            disabled={currentRating === null}
+            className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
+            onClick={handleReviewBox}
           >
             Make a review
           </button>
         </div>
       </div>
+
+      <div
+        className={
+          openReview
+            ? "flex absolute top-0 left-0 w-full h-full bg-[#000000cc]"
+            : "hidden"
+        }
+      >
+        <div className="flex flex-col items-start w-[250px] md:w-[500px] m-auto bg-primary p-7">
+          <div className="w-full flex justify-between items-center mb-5">
+            <h2 className="font-bold text-3xl">Write a review</h2>
+            <img
+              onClick={handleReviewBox}
+              className="w-[20px] cursor-pointer"
+              src={hamburgerClose.src}
+              alt="Close review popup"
+            />
+          </div>
+          <textarea
+            cols="10"
+            rows="10"
+            maxLength={255}
+            onChange={(e) => setReviewText(e.target.value)}
+            className="w-full p-3 bg-[#0b0b05ab] resize-none outline-none mb-5"
+            placeholder="Leave a review here!"
+          />
+
+          <button
+            onClick={submitReview}
+            className="py-2 px-4 rounded-sm bg-button font-bold duration-200 hover:bg-buttonHover"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

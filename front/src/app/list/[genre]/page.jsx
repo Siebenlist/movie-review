@@ -6,17 +6,6 @@ import { useEffect, useState } from "react";
 const ListPage = ({ params }) => {
   const [movies, setMovies] = useState();
 
-  //Esto es lo que ibamos a usar para calcular el id del genero
-  //asi lo mostrabamos en la pagina con el nombre
-  // const genreCalculator = (array, param) => {
-  //   for (let i = 0; i < array.length; i++) {
-  //     if (array[i].id === param) {
-  //       const data = array[i].name;
-  //       setGenre(data);
-  //     }
-  //   }
-  // };
-
   const handleMovies = async (genre) => {
     const options = {
       method: "GET",

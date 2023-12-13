@@ -1,6 +1,6 @@
 "use client";
 import { reviews } from "../data/reviews";
-import { useKeenSlider } from "keen-slider/react";
+import Link from "next/link";
 
 import bgHero from "../assets/bg-hero.jpg";
 import horrorImg from "../assets/horror-category.jpg";
@@ -55,12 +55,12 @@ export default function Home() {
               alt="horror category"
               className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
             />
-            <a
-              href="#"
+            <Link
+              href={"/list/27/"}
               className="flex justify-center items-center font-bold text-4xl"
             >
               Horror
-            </a>
+            </Link>
           </div>
           <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
             <Image
@@ -71,12 +71,12 @@ export default function Home() {
               alt="thriller category"
               className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
             />
-            <a
-              href="#"
+            <Link
+              href={"/list/53/"}
               className="flex justify-center items-center font-bold text-4xl"
             >
               Thriller
-            </a>
+            </Link>
           </div>
           <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px] justify-content-strech group overflow-hidden rounded-lg">
             <Image
@@ -87,12 +87,12 @@ export default function Home() {
               alt="romance category"
               className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
             />
-            <a
-              href="#"
+            <Link
+              href={"/list/10749/"}
               className="flex justify-center items-center font-bold text-4xl"
             >
               Romance
-            </a>
+            </Link>
           </div>
 
           <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
@@ -104,12 +104,12 @@ export default function Home() {
               alt="drama category"
               className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
             />
-            <a
-              href="#"
+            <Link
+              href={"/list/18/"}
               className="flex justify-center items-center font-bold text-4xl"
             >
               Drama
-            </a>
+            </Link>
           </div>
           {/* Este div solo se muestra en desktop */}
           <div className="hidden lg:flex gap-10">
@@ -122,12 +122,12 @@ export default function Home() {
                 alt="sci-fi category"
                 className="absolute -z-10 rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
               />
-              <a
-                href="#"
+              <Link
+                href={"/list/878/"}
                 className="flex justify-center items-center font-bold text-4xl"
               >
                 Sci-Fi
-              </a>
+              </Link>
             </div>
             <div className="grid relative w-[320px] md:w-[360px] h-[200px] md:h-[230px]  justify-content-strech group overflow-hidden rounded-lg">
               <Image
@@ -138,12 +138,12 @@ export default function Home() {
                 alt="comedy category"
                 className="absolute -z-10 aspect-[16/9] rounded-lg opacity-[0.4] duration-300 group-hover:scale-105"
               />
-              <a
-                href="#"
+              <Link
+                href={"/list/35/"}
                 className="flex justify-center items-center font-bold text-4xl"
               >
                 Comedy
-              </a>
+              </Link>
             </div>
           </div>
         </div>

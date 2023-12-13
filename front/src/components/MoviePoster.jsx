@@ -11,7 +11,7 @@ const MoviePoster = ({ id, poster, title, carousel }) => {
     >
       <a href={`http://localhost:3000/movie/${id}`}>
         <img
-          className="border border-white rounded-sm w-full"
+          className="border border-white rounded-sm w-full h-full"
           src={`https://image.tmdb.org/t/p/original/${poster}`}
           alt={`${title} poster`}
         />

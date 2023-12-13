@@ -1,15 +1,20 @@
 "use client";
 
+//TODO: HACER MAS LINDO EL COSO DE LA REVIEW PORQUE HAORA ESUNA CAGADA
+
 import MovieActions from "@/components/MovieActions";
 import ReviewCard from "@/components/ReviewCard";
 import { reviews } from "@/data/reviews";
 import { useState, useEffect } from "react";
+import { getStorageData } from "@/controllers/localStorageController";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
+  const [movieReviews, setMovieReviews] = useState();
+  const userData = JSON.parse(getStorageData());
 
   //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
-  const fetcheo = async (id) => {
+  const fetcheo = async () => {
     const options = {
       method: "GET",
       headers: {
@@ -21,7 +26,7 @@ const MoviePage = ({ params }) => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+        `https://api.themoviedb.org/3/movie/${params.id}?language=en-US`,
         options
       );
       const data = await response.json();
@@ -31,8 +36,34 @@ const MoviePage = ({ params }) => {
     }
   };
 
+  const getMovieReviews = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/getListReviewMovie?movieId=${params.id}`,
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data.reviews);
+        setMovieReviews(data.reviews);
+        console.log(movieReviews);
+      }
+    } catch {
+      console.log("Mal get reviews");
+    }
+  };
+
   useEffect(() => {
-    fetcheo(params.id);
+    fetcheo();
+    getMovieReviews();
   }, []);
 
   if (!movieData) return <div>Loading...</div>;
@@ -60,21 +91,21 @@ const MoviePage = ({ params }) => {
       </div>
       <div>
         <div className="max-w-[1200px]">
-          <p className="text-slate uppercase">Popular reviews</p>
+          <p className="text-slate uppercase">Reviews for this movie</p>
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>
         <div className="divide-y-2 divide-slate divide-opacity-50">
-          {reviews.map((review) => {
+          {movieReviews.map((review) => {
             return (
               <ReviewCard
                 key={review.id}
-                id={review.id}
-                movie={review.movie}
-                pfp={review.pfp}
-                poster={review.poster}
-                rating={review.rating}
                 review={review.review}
-                user={review.user}
+                poster={movieData.poster_path}
+                rating={review.rating.rating}
+                user={review.user.username}
+                pfp={
+                  "https://hips.hearstapps.com/hmg-prod/images/dl-u525201-016-1673780958.jpg?crop=0.7234375xw:1xh;center,top&resize=640:*"
+                }
               />
             );
           })}

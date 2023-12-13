@@ -6,9 +6,14 @@ import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
 import { useParams } from "next/navigation";
 
+import watchlistOn from "../assets/watchlistOn.svg";
+import watchlistOff from "../assets/watchlistOff.svg";
+
 const MovieActions = () => {
   const [movieFaved, setMovieFaved] = useState({ id: null });
   const [favCheck, setFavCheck] = useState();
+  const [movieListed, setMovieListed] = useState({ id: null });
+  const [listCheck, setListCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
   const params = useParams();
 
@@ -58,16 +63,80 @@ const MovieActions = () => {
     }
   };
 
+  const checkWatchlist = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/watchlisted?username=${userData.user}&movieId=${params.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        const watchlistData = await res.json();
+        if (watchlistData.id !== null) {
+          setListCheck(true);
+        } else {
+          setListCheck(false);
+        }
+      }
+    } catch {
+      console.log("Error papito check watchlist");
+    }
+  };
+
+  const handleWatchlist = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/handleWatchlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData.token}`,
+        },
+        body: JSON.stringify({
+          username: userData.user,
+          movieId: params.id,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMovieListed(data);
+      }
+    } catch {
+      alert("Erro ao adicionar a lista de favoritos");
+    }
+  };
+
   useEffect(() => {
-    console.log(params);
     checkFav();
   }, [movieFaved]);
 
+  useEffect(() => {
+    checkWatchlist();
+  }, [movieListed]);
+
   return (
     <div className="bg-menu rounded-md p-2 mb-2">
-      <div className="flex justify-center gap-3">
-        <button className="w-[35px] text-3xl text-slate decoration-dashed">
-          &#128065;
+      <div className="flex items-center justify-center gap-3">
+        <button onClick={handleWatchlist} className="hover:scale-105">
+          {listCheck ? (
+            <img
+              className="w-[30px]"
+              src={watchlistOn.src}
+              alt="Add to watchlist icon"
+            />
+          ) : (
+            <img
+              className="w-[30px]"
+              src={watchlistOff.src}
+              alt="Add to watchlist icon"
+            />
+          )}
         </button>
         <button
           onClick={handleFav}

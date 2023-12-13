@@ -38,7 +38,7 @@ const MoviePage = ({ params }) => {
   if (!movieData) return <div>Loading...</div>;
 
   return (
-    <section className="flex flex-col justify-center items-start mt-10 md:mb-[150px] p-3 mx-auto min-h-screen max-w-[1200px]">
+    <section className="flex flex-col justify-center items-start mt-10 md:mb-[150px] p-3 mx-auto min-h-fit max-w-[1200px]">
       <div className="flex flex-col justify-center items-start md:flex-row mb-5 md:mb-[150px]">
         <div className="w-full md:w-[30%] flex flex-col justify-center items-center mb-10 gap-5">
           <img
@@ -46,7 +46,7 @@ const MoviePage = ({ params }) => {
             className="w-[150px] md:w-[200px] border border-gray p-[1px] rounded-sm"
             alt={"poster"}
           />
-          <MovieActions movieId={params.id} />
+          <MovieActions />
         </div>
         <article className="p-3 w-full md:w-[70%]">
           <h1 className="text-xl md:text-4xl font-bold mb-5">

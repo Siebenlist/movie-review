@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import React from "react";
 import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
+import { useParams } from "next/navigation";
 
-const MovieActions = ({ movieId }) => {
+const MovieActions = () => {
   const [movieFaved, setMovieFaved] = useState({ id: null });
-  const [movieParamsId, setMovieParamsId] = useState(movieId);
   const [favCheck, setFavCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
+  const params = useParams();
 
   const checkFav = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/faved?username=${userData.user}&movieId=${movieId}`,
+        `http://localhost:8080/faved?username=${userData.user}&movieId=${params.id}`,
         {
           method: "GET",
           headers: {
@@ -45,7 +46,7 @@ const MovieActions = ({ movieId }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userData.token}`,
         },
-        body: JSON.stringify({ username: userData.user, movieId: movieId }),
+        body: JSON.stringify({ username: userData.user, movieId: params.id }),
       });
 
       if (res.ok) {
@@ -58,8 +59,8 @@ const MovieActions = ({ movieId }) => {
   };
 
   useEffect(() => {
+    console.log(params);
     checkFav();
-    setMovieParamsId(movieId);
   }, [movieFaved]);
 
   return (
@@ -79,7 +80,7 @@ const MovieActions = ({ movieId }) => {
       </div>
       <div className="text-center">
         <p>Rate this movie</p>
-        <RatingComponent movieId={movieParamsId} />
+        <RatingComponent />
       </div>
     </div>
   );

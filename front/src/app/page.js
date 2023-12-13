@@ -35,6 +35,13 @@ export default function Home() {
           Tell your friends what’s good.
         </h1>
 
+        <Link
+          href="/login"
+          className="inline-flex mt-10 text-xl md:hidden py-1 px-6 bg-button hover:bg-buttonHover duration-200 font-bold rounded-sm"
+        >
+          Login
+        </Link>
+
         <div className="absolute bottom-0 shadow-botM md:shadow-botD w-full -z-10"></div>
 
         <article className="flex flex-col justify-center items-center text-center w-[90%] md:w-[50%] mx-auto mt-[250px] md:mt-[350px]">

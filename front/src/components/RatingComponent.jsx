@@ -2,14 +2,17 @@
 import "@/app/globals.css";
 import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
-import Router from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 const RatingComponent = ({ movieId }) => {
   const [currentRating, setCurrentRating] = useState(null);
   const userData = JSON.parse(getStorageData());
   const [avgRating, setAvgRating] = useState(null);
 
-  const getGlobalRatings = async (movie_id) => {
+  const router = useRouter();
+  const params = useParams();
+
+  const getGlobalRatings = async () => {
     const options = {
       method: "GET",
       headers: {
@@ -20,7 +23,7 @@ const RatingComponent = ({ movieId }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/getGlobalRating?movieId=${movie_id}`,
+        `http://localhost:8080/getGlobalRating?movieId=${params.id}`,
         options
       );
       if (res.ok) {
@@ -45,13 +48,13 @@ const RatingComponent = ({ movieId }) => {
   const redirigir = () => {
     if (currentRating !== null) {
       // Obtén la URL deseada (ajústala según tus necesidades)
-      const url = `https://localhost:3000/movie/${movieId}/review`;
+      const url = `https://localhost:3000/movie/${params.id}/review`;
       // Redirige a la URL
-      Router.redirect(url);
+      router.push(url);
     }
   };
 
-  const getRating = async (movie_id) => {
+  const getRating = async () => {
     const options = {
       method: "GET",
       headers: {
@@ -62,7 +65,7 @@ const RatingComponent = ({ movieId }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${movie_id}`,
+        `http://localhost:8080/getPersonalRating?username=${userData.user}&movieId=${params.id}`,
         options
       );
       if (res.ok) {
@@ -82,7 +85,7 @@ const RatingComponent = ({ movieId }) => {
         Authorization: `Bearer ${userData.token}`,
       },
       body: JSON.stringify({
-        movieId: movieId,
+        movieId: params.id,
         rating: rating,
         username: userData.user,
       }),
@@ -100,8 +103,8 @@ const RatingComponent = ({ movieId }) => {
   };
 
   useEffect(() => {
-    getGlobalRatings(movieId);
-    getRating(movieId);
+    getGlobalRatings();
+    getRating();
   }, [currentRating]);
 
   return (

@@ -11,7 +11,7 @@ const RatingComponent = () => {
   const [avgRating, setAvgRating] = useState(null);
   const [openReview, setOpenReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
-
+  
   const params = useParams();
 
   const getGlobalRatings = async () => {
@@ -31,7 +31,6 @@ const RatingComponent = () => {
       if (res.ok) {
         const ratingData = await res.json();
         setAvgRating(ratingData.globalRating);
-        console.log("aca esta el coso del get del rating", ratingData);
       }
     } catch {
       console.log("Error al obtener el rating");
@@ -78,7 +77,6 @@ const RatingComponent = () => {
       console.log("Error review");
     }
   };
-
   const getRating = async () => {
     const options = {
       method: "GET",
@@ -96,7 +94,6 @@ const RatingComponent = () => {
       if (res.ok) {
         const ratingData = await res.json();
         setCurrentRating(ratingData.rating);
-        console.log("aca esta el coso del get del rating", ratingData);
       }
     } catch {
       console.log("Error al obtener el rating");
@@ -122,8 +119,6 @@ const RatingComponent = () => {
       if (res.ok) {
         const data = await res.json();
         setCurrentRating(data.rating);
-        console.log("data", data);
-        console.log("posteo rating ok");
       }
     } catch {
       console.log("posteo rating fail");
@@ -162,7 +157,30 @@ const RatingComponent = () => {
           >
             Make a review
           </button>
+      <span>Avg. Rating: {avgRating}</span>
+      <div className="box flex flex-col">
+        <div>
+          {[5, 4, 3, 2, 1].map((index) => {
+            return (
+              <span
+                key={index}
+                className={`b1 text-4xl cursor-pointer ${
+                  index <= currentRating ? "text-star" : "text-slate"
+                }`}
+                onClick={() => handleStarClick(index - 1)}
+              >
+                &#9733;
+              </span>
+            );
+          })}
         </div>
+        <button
+          disabled={currentRating === null}
+          className="mt-3 py-2 px-4 font-bold rounded-md bg-[#3D1465E0] text-white disabled:text-gray disabled:bg-[#c1c1c1bb]"
+          onClick={handleReviewBox}
+        >
+          Make a review
+        </button>
       </div>
 
       <div

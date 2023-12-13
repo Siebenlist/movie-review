@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import React from "react";
 import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
+import { useParams } from "next/navigation";
 
-const MovieActions = ({ movieId }) => {
+const MovieActions = () => {
   const [movieFaved, setMovieFaved] = useState({ id: null });
-  const [movieParamsId, setMovieParamsId] = useState(movieId);
   const [favCheck, setFavCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
+  const params = useParams();
 
   const checkFav = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/faved?username=${userData.user}&movieId=${movieId}`,
+        `http://localhost:8080/faved?username=${userData.user}&movieId=${params.id}`,
         {
           method: "GET",
           headers: {
@@ -26,7 +27,6 @@ const MovieActions = ({ movieId }) => {
 
       if (res.ok) {
         const favData = await res.json();
-        console.log("Una locura lo tuyo", favData);
         if (favData.id !== null) {
           setFavCheck(true);
         } else {
@@ -46,34 +46,21 @@ const MovieActions = ({ movieId }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userData.token}`,
         },
-        body: JSON.stringify({ username: userData.user, movieId: movieId }),
+        body: JSON.stringify({ username: userData.user, movieId: params.id }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        console.log("data", data);
-        console.log("Uusario", userData.user);
         setMovieFaved(data);
       }
     } catch {
-      console.log("Error al agregar a favoritos");
-      console.log(userData.token, { username: userData.user, movieId: 2 });
       alert("Erro ao adicionar a lista de favoritos");
     }
   };
 
   useEffect(() => {
-    console.log(
-      "info para favoritear: ",
-      userData.user,
-      movieId,
-      userData.token
-    );
-    console.log("asda", userData.user);
-    console.log("Movie faved es:", movieFaved);
-
+    console.log(params);
     checkFav();
-    setMovieParamsId(movieId);
   }, [movieFaved]);
 
   return (
@@ -93,7 +80,7 @@ const MovieActions = ({ movieId }) => {
       </div>
       <div className="text-center">
         <p>Rate this movie</p>
-        <RatingComponent movieId={movieParamsId} />
+        <RatingComponent />
       </div>
     </div>
   );

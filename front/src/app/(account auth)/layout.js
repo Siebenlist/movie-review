@@ -7,9 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function AccountLayout({ children }) {
   return (
-    <section
-      className={`${inter.className} flex flex-col justify-between min-h-screen`}
-    >
+    <section className={`${inter.className} flex place-items-center min-h-max`}>
       <Image
         src={bgPattern}
         alt="Background pattern"
@@ -17,7 +15,6 @@ export default function AccountLayout({ children }) {
         className="absolute object-cover top-0 left-0 -z-10 hidden md:block"
       />
       {children}
-      <Footer />
     </section>
   );
 }

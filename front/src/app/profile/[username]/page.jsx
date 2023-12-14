@@ -13,6 +13,13 @@ const Profile = ({ params }) => {
   const [favList, setFavList] = useState([]);
   const [posterPaths, setPosterPaths] = useState([]);
 
+  const fetchData = async () => {
+    const paths = await Promise.all(
+        favList.map(async (fav) => movieDataFetch(fav.movieId))
+    );
+    setPosterPaths(paths);
+  };
+
   const [sliderRef] = useKeenSlider({
     renderMode: "performance",
     rubberband: false,
@@ -77,15 +84,7 @@ const Profile = ({ params }) => {
     getFavMovies();
   }, []);
 
-  //TODO: REVISAR ESTO A VER SI SE PUEDE OPTIMIZAR
   useEffect(() => {
-    const fetchData = async () => {
-      const paths = await Promise.all(
-        favList.map(async (fav) => movieDataFetch(fav.movieId))
-      );
-      setPosterPaths(paths);
-    };
-
     fetchData();
   }, [favList]);
 

@@ -2,7 +2,7 @@ import React from "react";
 import reviewStar from "../assets/reviewStar.svg";
 import Image from "next/image";
 
-const ReviewCard = ({ id, poster, rating, movie, user, review, pfp }) => {
+const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
   return (
     <article className="review flex gap-10 p-5" key={id}>
       <div className="hidden md:flex flex-col items-center w-[100px]">
@@ -24,6 +24,7 @@ const ReviewCard = ({ id, poster, rating, movie, user, review, pfp }) => {
           </a>
         </div>
         <p className="break-words">{review}</p>
+          <p className="text-sm text-gray">Reviewed at: {date}</p>
       </div>
     </article>
   );

@@ -11,14 +11,23 @@ import { useEffect, useState } from "react";
 const Profile = ({ params }) => {
   const userData = JSON.parse(getStorageData());
   const [favList, setFavList] = useState([]);
-  const [posterPaths, setPosterPaths] = useState([]);
+  const [favPosterPaths, setFavPosterPaths] = useState([]);
+  const [reviewPosterPaths, setReviewPosterPaths] = useState([]);
+  const [reviewList, setReviewList] = useState([]);
 
-  const fetchData = async () => {
+  const fetchFavPosters = async () => {
     const paths = await Promise.all(
         favList.map(async (fav) => movieDataFetch(fav.movieId))
     );
-    setPosterPaths(paths);
+    setFavPosterPaths(paths);
   };
+
+  const fetchReviewPosters = async () => {
+    const paths = await Promise.all(
+        reviewList.map(async (review) => movieDataFetch(review.movieId))
+    );
+    setReviewPosterPaths(paths);
+  }
 
   const [sliderRef] = useKeenSlider({
     renderMode: "performance",
@@ -50,7 +59,7 @@ const Profile = ({ params }) => {
         options
       );
       const data = await response.json();
-      return data.poster_path;
+      return {"path": data.poster_path, "id" : data.id , "title": data.original_title};
     } catch (err) {
       console.error(err);
     }
@@ -71,21 +80,46 @@ const Profile = ({ params }) => {
         options
       );
       if (res.ok) {
-        console.log("Bien get fav movies");
         const data = await res.json();
         setFavList(data.favourites);
       }
     } catch {
-      console.log("Mal get fav movies");
+    }
+  };
+  const getReviewedMovies = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+
+    try {
+      const res = await fetch(
+          `http://localhost:8080/getListReviewUser?username=${params.username}`,
+          options
+      );
+      if (res.ok) {
+        console.log("Bien get review movies");
+        const data = await res.json();
+        setReviewList(data.reviews);
+      }
+    } catch {
+      console.log("Mal get review movies");
     }
   };
 
   useEffect(() => {
     getFavMovies();
+    getReviewedMovies();
   }, []);
 
   useEffect(() => {
-    fetchData();
+    fetchReviewPosters();
+  }, [reviewList]);
+  useEffect(() => {
+    fetchFavPosters();
   }, [favList]);
 
   return (
@@ -99,8 +133,11 @@ const Profile = ({ params }) => {
           ref={sliderRef}
           className="keen-slider flex gap-3 w-full mt-2 animate-fade-in"
         >
-          {posterPaths.map((posterPath, index) => (
-            <MoviePoster key={favList[index].id} poster={posterPath} />
+          {favPosterPaths.map((posterPath, index) => (
+              <div key={favList[index].movieId}>
+                <MoviePoster  poster={posterPath.path} id={favList[index].movieId} />
+              </div>
+
           ))}
         </div>
       </article>
@@ -111,7 +148,16 @@ const Profile = ({ params }) => {
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>
         <div className="flex flex-col gap-2 divide-y border-b-[1px] border-gray divide-slate">
-          {}
+          {reviewPosterPaths.map((posterPath, index) => (
+              <ReviewCard key={reviewList[index].movieId}
+                          review={reviewList[index].review}
+                          poster={posterPath.path}
+                          rating={reviewList[index].rating.rating}
+                          movie={posterPath.title}
+                          date={reviewList[index].date}
+              />
+
+          ))}
         </div>
       </article>
     </section>

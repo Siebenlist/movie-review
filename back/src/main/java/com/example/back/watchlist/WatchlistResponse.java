@@ -1,4 +1,4 @@
-package com.example.back.rating;
+package com.example.back.watchlist;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GlobalRatingResponse {
-
-    private Integer movieId;
-    private Double globalRating;
+public class WatchlistResponse {
+    private Integer id;
 }

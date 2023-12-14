@@ -3,6 +3,7 @@ package com.example.back.follow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,4 +12,7 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
     Integer countByFollowerId(Integer followerId);
     Integer countByFollowedId(Integer followedId);
     void deleteByFollowerIdAndFollowedId(Integer followerId, Integer followedId);
+    List<Follow> findAllByFollowerId(Integer followerId);
+    List<Follow> findAllByFollowedId(Integer followedId);
+
 }

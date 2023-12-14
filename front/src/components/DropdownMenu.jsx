@@ -9,7 +9,11 @@ const DropdownMenu = () => {
   const [movieGenres, setMovieGenres] = useState();
 
   const handleDropdown = () => {
-    setOpen(!open);
+    setOpen(true);
+  };
+
+  const closeDropdown = () => {
+    setOpen(false);
   };
 
   const genreFetch = async () => {
@@ -38,16 +42,29 @@ const DropdownMenu = () => {
 
   useEffect(() => {
     genreFetch();
-  }, [movieGenres]);
+  }, []);
 
-  if (!movieGenres) return <div>Movies</div>;
+  if (!movieGenres)
+    return (
+      <div className="inline-flex items-center cursor-pointer">
+        Movies{" "}
+        <Image
+          src={dropdownArrow}
+          width={20}
+          height={20}
+          alt="dropdown toggle open"
+          className={`duration-200 ${open ? "rotate-90" : "rotate-0"}`}
+        />
+      </div>
+    );
 
   return (
     <div>
       <div>
         <button
           className="inline-flex items-center cursor-pointer"
-          onClick={handleDropdown}
+          onMouseEnter={handleDropdown}
+          onMouseLeave={closeDropdown}
         >
           Movies
           <Image
@@ -60,8 +77,10 @@ const DropdownMenu = () => {
         </button>
       </div>
       <ul
-        className={`bg-menu text-white text-center rounded-md absolute z-40 ${
-          open ? "block" : "hidden"
+        onMouseEnter={handleDropdown}
+        onMouseLeave={closeDropdown}
+        className={`flex-col flex-wrap h-[250px] bg-slate md:bg-menu text-black md:text-white text-center rounded-md absolute z-40 ${
+          open ? "flex" : "hidden"
         }`}
       >
         {movieGenres.genres.map((genre) => {

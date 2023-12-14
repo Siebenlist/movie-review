@@ -4,7 +4,10 @@ import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import HamburgerMenu from "./HamburgerMenu";
 import searchIcon from "../assets/searchIcon.svg";
-import { deleteStorageData } from "@/controllers/localStorageController";
+import {
+  deleteStorageData,
+  getStorageData,
+} from "@/controllers/localStorageController";
 
 import { userContext } from "@/context/propContext";
 import { useContext } from "react";
@@ -12,7 +15,7 @@ import { useContext } from "react";
 import { useRouter } from "next/navigation";
 
 const NavLogged = () => {
-  const { setUserLogged } = useContext(userContext);
+  const { userLogged, setUserLogged } = useContext(userContext);
 
   const router = useRouter();
 
@@ -53,7 +56,7 @@ const NavLogged = () => {
           <DropdownMenu />
         </li>
         <li>
-          <Link href="/profile">Profile</Link>
+          <a href={`/profile/${userLogged.user}`}>Profile</a>
         </li>
         <li>
           <button onClick={handleLogout}>Logout</button>

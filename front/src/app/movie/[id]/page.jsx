@@ -10,7 +10,7 @@ import { getStorageData } from "@/controllers/localStorageController";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
-  const [movieReviews, setMovieReviews] = useState();
+  const [movieReviews, setMovieReviews] = useState([]);
   const userData = JSON.parse(getStorageData());
 
   //Esta funcion fetchea la pelicula que se haya buscado y devuelve los detalles
@@ -52,9 +52,7 @@ const MoviePage = ({ params }) => {
       );
       if (res.ok) {
         const data = await res.json();
-        console.log(data.reviews);
         setMovieReviews(data.reviews);
-        console.log(movieReviews);
       }
     } catch {
       console.log("Mal get reviews");

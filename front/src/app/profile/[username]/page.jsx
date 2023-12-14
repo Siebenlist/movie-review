@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 
 const Profile = ({ params }) => {
   const userData = JSON.parse(getStorageData());
-  const [favList, setFavList] = useState({});
+  const [favList, setFavList] = useState([]);
+  const [posterPaths, setPosterPaths] = useState([]);
 
   const [sliderRef] = useKeenSlider({
     renderMode: "performance",
@@ -42,7 +43,7 @@ const Profile = ({ params }) => {
         options
       );
       const data = await response.json();
-      setMovieData(data); // Almacena los datos en el estado
+      return data.poster_path;
     } catch (err) {
       console.error(err);
     }
@@ -76,6 +77,18 @@ const Profile = ({ params }) => {
     getFavMovies();
   }, []);
 
+  //TODO: REVISAR ESTO A VER SI SE PUEDE OPTIMIZAR
+  useEffect(() => {
+    const fetchData = async () => {
+      const paths = await Promise.all(
+        favList.map(async (fav) => movieDataFetch(fav.movieId))
+      );
+      setPosterPaths(paths);
+    };
+
+    fetchData();
+  }, [favList]);
+
   return (
     <section className="flex flex-col justify-center my-5 max-w-[1200px] mx-auto">
       <article className="">
@@ -85,15 +98,11 @@ const Profile = ({ params }) => {
         </div>
         <div
           ref={sliderRef}
-          className="keen-slider w-full mt-2 animate-fade-in"
+          className="keen-slider flex gap-3 w-full mt-2 animate-fade-in"
         >
-          {
-            favList.map(fav => {
-              return (
-                <MoviePoster key={fav.id} poster={} />
-              )
-            })
-          }
+          {posterPaths.map((posterPath, index) => (
+            <MoviePoster key={favList[index].id} poster={posterPath} />
+          ))}
         </div>
       </article>
 

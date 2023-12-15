@@ -32,4 +32,14 @@ public class Review {
     @OneToOne(optional = false)
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = new Date();
+    }
 }

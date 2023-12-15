@@ -28,4 +28,13 @@ public class Rating {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @PrePersist
+    protected void onCreate() {
+        created_at = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = new Date();
+    }
 }

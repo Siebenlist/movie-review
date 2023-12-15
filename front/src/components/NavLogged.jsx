@@ -41,8 +41,6 @@ const NavLogged = () => {
               <input
                 className="w-40 py-1 px-3 rounded-full bg-input text-white placeholder:text-white"
                 type="search"
-                name=""
-                id=""
                 placeholder="Search"
               />
 

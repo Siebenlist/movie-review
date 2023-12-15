@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6eea36a6-3fee-4536-a0b1-6b10e01a872a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/user/imgprofile/controller/MediaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/user/imgprofile/service/FileSystemStorageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/user/imgprofile/service/StorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +56,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "rating-fetch-back",
+    "git-widget-placeholder": "upload-file",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

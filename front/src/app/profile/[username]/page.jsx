@@ -15,20 +15,6 @@ const Profile = ({ params }) => {
   const [reviewPosterPaths, setReviewPosterPaths] = useState([]);
   const [reviewList, setReviewList] = useState([]);
 
-  const fetchFavPosters = async () => {
-    const paths = await Promise.all(
-        favList.map(async (fav) => movieDataFetch(fav.movieId))
-    );
-    setFavPosterPaths(paths);
-  };
-
-  const fetchReviewPosters = async () => {
-    const paths = await Promise.all(
-        reviewList.map(async (review) => movieDataFetch(review.movieId))
-    );
-    setReviewPosterPaths(paths);
-  }
-
   const [sliderRef] = useKeenSlider({
     renderMode: "performance",
     rubberband: false,
@@ -42,6 +28,20 @@ const Profile = ({ params }) => {
     },
     slides: { perView: 2 },
   });
+
+  const fetchFavPosters = async () => {
+    const paths = await Promise.all(
+      favList.map(async (fav) => movieDataFetch(fav.movieId))
+    );
+    setFavPosterPaths(paths);
+  };
+
+  const fetchReviewPosters = async () => {
+    const paths = await Promise.all(
+      reviewList.map(async (review) => movieDataFetch(review.movieId))
+    );
+    setReviewPosterPaths(paths);
+  };
 
   const movieDataFetch = async (id) => {
     const options = {
@@ -59,7 +59,11 @@ const Profile = ({ params }) => {
         options
       );
       const data = await response.json();
-      return {"path": data.poster_path, "id" : data.id , "title": data.original_title};
+      return {
+        path: data.poster_path,
+        id: data.id,
+        title: data.original_title,
+      };
     } catch (err) {
       console.error(err);
     }
@@ -83,8 +87,7 @@ const Profile = ({ params }) => {
         const data = await res.json();
         setFavList(data.favourites);
       }
-    } catch {
-    }
+    } catch {}
   };
   const getReviewedMovies = async () => {
     const options = {
@@ -97,8 +100,8 @@ const Profile = ({ params }) => {
 
     try {
       const res = await fetch(
-          `http://localhost:8080/getListReviewUser?username=${params.username}`,
-          options
+        `http://localhost:8080/getListReviewUser?username=${params.username}`,
+        options
       );
       if (res.ok) {
         console.log("Bien get review movies");
@@ -134,10 +137,12 @@ const Profile = ({ params }) => {
           className="keen-slider flex gap-3 w-full mt-2 animate-fade-in"
         >
           {favPosterPaths.map((posterPath, index) => (
-              <div key={favList[index].movieId}>
-                <MoviePoster  poster={posterPath.path} id={favList[index].movieId} />
-              </div>
-
+            <div key={favList[index].movieId}>
+              <MoviePoster
+                poster={posterPath.path}
+                id={favList[index].movieId}
+              />
+            </div>
           ))}
         </div>
       </article>
@@ -149,14 +154,14 @@ const Profile = ({ params }) => {
         </div>
         <div className="flex flex-col gap-2 divide-y border-b-[1px] border-gray divide-slate">
           {reviewPosterPaths.map((posterPath, index) => (
-              <ReviewCard key={reviewList[index].movieId}
-                          review={reviewList[index].review}
-                          poster={posterPath.path}
-                          rating={reviewList[index].rating.rating}
-                          movie={posterPath.title}
-                          date={reviewList[index].date}
-              />
-
+            <ReviewCard
+              key={reviewList[index].movieId}
+              review={reviewList[index].review}
+              poster={posterPath.path}
+              rating={reviewList[index].rating.rating}
+              movie={posterPath.title}
+              date={reviewList[index].date}
+            />
           ))}
         </div>
       </article>

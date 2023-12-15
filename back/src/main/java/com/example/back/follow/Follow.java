@@ -28,4 +28,14 @@ public class Follow {
     @ManyToOne(optional = false)
     @JoinColumn(name = "followed_id", referencedColumnName = "id")
     private User followed;
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = new Date();
+    }
 }

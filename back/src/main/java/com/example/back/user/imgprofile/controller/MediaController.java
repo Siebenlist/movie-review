@@ -1,5 +1,6 @@
 package com.example.back.user.imgprofile.controller;
 
+import com.example.back.user.imgprofile.ImgProfileRequest;
 import com.example.back.user.imgprofile.service.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,9 @@ public class MediaController {
     private final HttpServletRequest request;
 
     @PostMapping(value = "/upload")
-    public Map<String, String> uploadFile(@RequestParam("File") MultipartFile multipartFile,
-                                          @RequestParam("usuario") String usuario) {
+    public Map<String, String> uploadFile(@RequestBody ImgProfileRequest imgProfileRequest) {
         try{
-            String path = storageService.store(multipartFile, usuario);
+            String path = storageService.store(imgProfileRequest.getFile(), imgProfileRequest.getUsuario());
             //System.out.println(path);
             String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
             String url = ServletUriComponentsBuilder

@@ -13,7 +13,7 @@ const ProfileNav = () => {
         <Link href={`/profile/${params.username}/watchlist`}>Watchlist</Link>
       </li>
       <li>
-        <Link href={`/profile/${params.username}/followers`}>Followers</Link>
+        <Link href={`/profile/${params.username}/follow`}>Followers</Link>
       </li>
       <li>
         <Link href={`/profile/${params.username}/settings`}>My account</Link>

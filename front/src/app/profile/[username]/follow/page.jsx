@@ -91,13 +91,6 @@ const Followers = ({ params }) => {
                       followedId={follow.followed.id}
                       username={follow.follower.username}
                     />
-                    <button
-                      onClick={() => {
-                        console.log(follow.id);
-                      }}
-                    >
-                      console.log
-                    </button>
                   </div>
                 );
               })
@@ -116,13 +109,6 @@ const Followers = ({ params }) => {
                       followedId={follow.follower.id}
                       initialIsFollowing={true}
                     />
-                    <button
-                      onClick={() => {
-                        console.log(follow.id);
-                      }}
-                    >
-                      console.log
-                    </button>
                   </div>
                 );
               })}

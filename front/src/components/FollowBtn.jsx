@@ -38,9 +38,6 @@ const FollowBtn = ({ initialIsFollowing, username, followedId }) => {
     postFollow();
   };
 
-  useEffect(() => {
-    console.log("FollowedId", followedId);
-  }, []);
 
   return (
     <button

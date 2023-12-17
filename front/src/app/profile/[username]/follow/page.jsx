@@ -9,8 +9,27 @@ const Followers = ({ params }) => {
   const [followToggle, setFollowToggle] = useState(false);
   const [followersList, setFollowersList] = useState([]);
   const [followingList, setFollowingList] = useState([]);
-
+  const [isFollowing, setIsFollowing] = useState([]);
   const userData = JSON.parse(getStorageData());
+
+  const inverseFollow = async (follow) => {
+    return new Promise((resolve, reject) => {
+      const found = followingList.some((followCheck) => {
+        return followCheck.followed.id === follow.follower.id && followCheck.follower.id === follow.followed.id;
+      });
+      resolve(found);
+    });
+  };
+  
+
+  const checkFollow = async (follow) => {
+    try {
+      const result = await inverseFollow(follow);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const setFollowers = () => {
     if (followToggle !== false) {
@@ -39,9 +58,8 @@ const Followers = ({ params }) => {
       );
       if (res.ok) {
         const data = await res.json();
-        setFollowingList(data.followerList);
-        setFollowersList(data.followedList);
-        console.log(data);
+        setFollowingList(data.followedList);
+        setFollowersList(data.followerList);
       }
     } catch {
       console.log(params.username);
@@ -51,6 +69,17 @@ const Followers = ({ params }) => {
   useEffect(() => {
     fetchFollowList();
   }, [followToggle]);
+
+  useEffect(() => {
+    const fetchIsFollowing = async () => {
+      const promises = followersList.map(follow => checkFollow(follow));
+      const results = await Promise.all(promises);
+      setIsFollowing(results);
+    };
+  
+    fetchIsFollowing();
+  }, [followersList]);
+
 
   return (
     <section>
@@ -94,7 +123,7 @@ const Followers = ({ params }) => {
                   </div>
                 );
               })
-            : followersList.map((follow) => {
+            : followersList.map((follow, index) => {
                 return (
                   <div
                     className="flex justify-between items-center"
@@ -107,7 +136,7 @@ const Followers = ({ params }) => {
                     <FollowBtn
                       username={follow.followed.username}
                       followedId={follow.follower.id}
-                      initialIsFollowing={true}
+                      initialIsFollowing={isFollowing[index]}
                     />
                   </div>
                 );

@@ -1,12 +1,9 @@
-"use client";
-
 import { getStorageData } from "@/controllers/localStorageController";
 import { useEffect, useState } from "react";
 
-const FollowBtn = ({ initialIsFollowing, username, followedUsername }) => {
+const FollowBtn = ({ initialIsFollowing, username, followedUsername, onFollowChange }) => {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const userData = JSON.parse(getStorageData());
-  // const text = initialIsFollowing !== null ? "Following" : "Follow";
 
   const postFollow = async () => {
     const options = {
@@ -21,7 +18,11 @@ const FollowBtn = ({ initialIsFollowing, username, followedUsername }) => {
       const res = await fetch("http://localhost:8080/follow", options);
       if (res.ok) {
         console.log("Bien el posteo del follow");
-        setIsFollowing(!initialIsFollowing);
+        setIsFollowing(!isFollowing);
+        // Llamar a la función proporcionada por la prop onFollowChange
+        if (onFollowChange) {
+          onFollowChange();
+        }
       }
     } catch {
       console.log("Mal el posteo del follow");
@@ -29,21 +30,20 @@ const FollowBtn = ({ initialIsFollowing, username, followedUsername }) => {
   };
 
   const buttonStyles = isFollowing
-    ? "bg-following hover:bg-followingHover active:bg-followingActive"
-    : "bg-button hover:bg-buttonHover active:bg-button";
+      ? "bg-following hover:bg-followingHover active:bg-followingActive"
+      : "bg-button hover:bg-buttonHover active:bg-button";
 
   const handleFollow = () => {
     postFollow();
   };
 
-
   return (
-    <button
-      className={`${buttonStyles} py-2 px-6 rounded-full font-bold duration-200`}
-      onClick={handleFollow}
-    >
-      {isFollowing ? "Following" : "Follow"}
-    </button>
+      <button
+          className={`${buttonStyles} py-2 px-6 rounded-full font-bold duration-200`}
+          onClick={handleFollow}
+      >
+        {isFollowing ? "Following" : "Follow"}
+      </button>
   );
 };
 

@@ -15,7 +15,6 @@ const ProfileData = () => {
   const checkFollow = async () => {
     try {
       const results = await getFollow();
-      console.log("results", results);
       setIsFollowing(results);
     } catch (error) {
       console.error("Error checking follow:", error);
@@ -40,16 +39,12 @@ const ProfileData = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        console.log("bien get follow", data);
-        // Devolver true si el ID no es null, de lo contrario, devolver false
         return data.id !== null;
       } else {
-        // En caso de que la respuesta no sea ok, lanzar una excepción
         throw new Error("Response not ok");
       }
     } catch (error) {
       console.error("Error in getFollow:", error);
-      // Lanzar la excepción nuevamente para que pueda ser manejada en checkFollow
       throw error;
     }
   };

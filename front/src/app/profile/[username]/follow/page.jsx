@@ -10,6 +10,7 @@ const Followers = ({ params }) => {
   const [followersList, setFollowersList] = useState([]);
   const [followingList, setFollowingList] = useState([]);
   const [isFollowing, setIsFollowing] = useState([]);
+  const [loadingFollow, setLoadingFollow] = useState(false);
   const userData = JSON.parse(getStorageData());
 
   const inverseFollow = async (follow) => {
@@ -65,17 +66,27 @@ const Followers = ({ params }) => {
       console.log(params.username);
     }
   };
+  const handleFollowChange = async () => {
+    await fetchIsFollowing();
+  };
+  const fetchIsFollowing = async () => {
+    try {
+      setLoadingFollow(true);
+      const promises = followersList.map(follow => checkFollow(follow));
+      const results = await Promise.all(promises);
+      setIsFollowing(results);
+    } catch (error) {
+      console.error("Error fetching isFollowing:", error);
+    } finally {
+      setLoadingFollow(false);
+    }
+  };
 
   useEffect(() => {
     fetchFollowList();
   }, [followToggle]);
 
   useEffect(() => {
-    const fetchIsFollowing = async () => {
-      const promises = followersList.map(follow => checkFollow(follow));
-      const results = await Promise.all(promises);
-      setIsFollowing(results);
-    };
   
     fetchIsFollowing();
   }, [followersList]);
@@ -115,11 +126,12 @@ const Followers = ({ params }) => {
                       id={follow.followed.id}
                       username={follow.followed.username}
                     />
-                    <FollowBtn
+                    {userData.user === params.username && (<FollowBtn
                       initialIsFollowing={true}
-                      followedId={follow.followed.id}
+                      followedUsername={follow.followed.username}
                       username={follow.follower.username}
-                    />
+                      onFollowChange={handleFollowChange}
+                  />)}
                   </div>
                 );
               })
@@ -133,11 +145,16 @@ const Followers = ({ params }) => {
                       id={follow.follower.id}
                       username={follow.follower.username}
                     />
-                    <FollowBtn
-                      username={follow.followed.username}
-                      followedId={follow.follower.id}
-                      initialIsFollowing={isFollowing[index]}
-                    />
+                    {userData.user === params.username && (
+                        !loadingFollow && (
+                            <FollowBtn
+                                username={follow.followed.username}
+                                followedUsername={follow.follower.username}
+                                initialIsFollowing={isFollowing[index]}
+                                onFollowChange={handleFollowChange}
+                            />
+                        )
+                    )}
                   </div>
                 );
               })}

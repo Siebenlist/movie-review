@@ -44,5 +44,6 @@ public class UserController {
             userRepository.save(user);
             return ResponseEntity.ok("Password updated successfully");
         }
+        return ResponseEntity.badRequest().body("Something went wrong");
     }
 }

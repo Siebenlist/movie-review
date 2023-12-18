@@ -80,13 +80,11 @@ const ProfileData = () => {
             </div>
           </div>
         </div>
-        {!loading && (
-            <FollowBtn
-                initialIsFollowing={isFollowing}
-                username={userData.user}
-                followedUsername={params.username}
-            />
-        )}
+        { userData.user !== params.username && !loading ? <FollowBtn
+            initialIsFollowing={isFollowing}
+            username={userData.user}
+            followedUsername={params.username}
+        /> : ""}
       </div>
   );
 };

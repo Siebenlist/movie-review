@@ -17,7 +17,7 @@ public class FollowController {
     @PostMapping(value = "/follow")
     public ResponseEntity<FollowResponse> handleFollow(@RequestBody FollowRequest followRequest) {
         User user = userRepository.findUserByUsername(followRequest.getUsername());
-        User followed = userRepository.findUserById(followRequest.getFollowedId());
+        User followed = userRepository.findUserByUsername(followRequest.getFollowedUsername());
         if (user == null || followed == null) {
             return null;
         }
@@ -40,12 +40,13 @@ public class FollowController {
     }
 
     @GetMapping(value = "/getFollow")
-    public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam Integer followedId) {
+    public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam String followedUsername) {
         User user = userRepository.findUserByUsername(username);
+        User followed = userRepository.findUserByUsername(followedUsername);
         if (user == null) {
             return null;
         }
-        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followedId);
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followed.getId());
         if (follow == null) {
             return ResponseEntity.ok(FollowResponse.builder()
                     .id(null)

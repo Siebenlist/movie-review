@@ -45,7 +45,7 @@ public class UserController {
                     .build());
         }
         if(userRequest.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), userRequest.getPassword()));
             UserDetails userDetails = userRepository.findByUsername(user.getUsername())
                     .orElseThrow();

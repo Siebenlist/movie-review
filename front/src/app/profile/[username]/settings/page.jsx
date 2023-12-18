@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 
 const Settings = () => {
   const [userInfo, setUserInfo] = useState({
-    username: null,
+    newUsername: null,
     email: null,
     password: null,
   });
+
+  const [activeField, setActiveField] = useState(null);
 
   const userData = JSON.parse(getStorageData());
 
@@ -45,7 +47,8 @@ const Settings = () => {
         Authorization: `Bearer ${userData.token}`,
       },
       body: JSON.stringify({
-        username: userInfo.username,
+        actualUsername: userData.user,
+        newUsername: userInfo.newUsername,
         email: userInfo.email,
         password: userInfo.password,
       }),
@@ -53,7 +56,7 @@ const Settings = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/updateUserInfo?username=${userData.user}`,
+        `http://localhost:8080/userInfo?username=${userData.user}`,
         options
       );
       if (res.ok) {
@@ -65,8 +68,22 @@ const Settings = () => {
   };
 
   const handleChange = (e, fieldName) => {
-    setUserInfo({ ...userInfo, [fieldName]: e.target.value });
-    console.log(userInfo);
+    // Verificar si hay otro campo de entrada activo y restablecerlo a null
+    if (activeField && activeField !== fieldName) {
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        [activeField]: null,
+      }));
+    }
+
+    // Actualizar el campo de entrada activo
+    setActiveField(fieldName);
+
+    // Actualizar el estado con la nueva entrada del usuario
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      [fieldName]: e.target.value,
+    }));
   };
 
   useEffect(() => {
@@ -85,7 +102,8 @@ const Settings = () => {
           </label>
           <div className="inline-flex items-start gap-3">
             <input
-              type="username"
+              type="text"
+              value={userInfo.newUsername || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="username"
               onChange={(e) => handleChange(e, "username")}
@@ -93,6 +111,7 @@ const Settings = () => {
             <button
               type="submit"
               className="text-white bg-button hover:bg-buttonHover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
+              onClick={() => updateUserInfo()}
             >
               Update
             </button>
@@ -108,6 +127,7 @@ const Settings = () => {
           <div className="inline-flex items-start gap-3">
             <input
               type="email"
+              value={userInfo.email || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="email@email.com"
               onChange={(e) => handleChange(e, "email")}
@@ -115,6 +135,7 @@ const Settings = () => {
             <button
               type="submit"
               className="text-white bg-button hover:bg-buttonHover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
+              onClick={() => updateUserInfo()}
             >
               Update
             </button>
@@ -131,6 +152,7 @@ const Settings = () => {
           <div className="inline-flex gap-3">
             <input
               type="password"
+              value={userInfo.password || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="password"
               onChange={(e) => handleChange(e, "password")}
@@ -138,6 +160,7 @@ const Settings = () => {
             <button
               type="submit"
               className="text-white bg-button hover:bg-buttonHover focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center"
+              onClick={() => updateUserInfo()}
             >
               Update
             </button>

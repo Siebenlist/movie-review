@@ -1,12 +1,8 @@
 "use client";
 
-import NavLogged from "@/components/NavLogged";
 import ProfileData from "@/components/ProfileData";
 import ProfileNav from "@/components/ProfileNav";
 import { Inter } from "next/font/google";
-
-import { userContext } from "@/context/propContext";
-import { useContext } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 

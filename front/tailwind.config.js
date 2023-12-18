@@ -48,6 +48,7 @@ module.exports = {
       star: "#EAC423",
       starHover: "#C09F03",
       red: "#ec5353",
+      green: "#5cb85c",
     },
   },
   plugins: [],

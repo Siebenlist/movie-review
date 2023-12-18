@@ -160,7 +160,11 @@ const Profile = ({ params }) => {
               poster={posterPath.path}
               rating={reviewList[index].rating.rating}
               movie={posterPath.title}
-              date={reviewList[index].date}
+              date={
+                reviewList[index].updated_at !== null
+                  ? reviewList[index].updated_at
+                  : reviewList[index].created_at
+              }
             />
           ))}
         </div>

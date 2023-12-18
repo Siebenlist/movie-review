@@ -61,8 +61,8 @@ public class FollowController {
         if (user == null) {
             return null;
         }
-        List<Follow> followerList = followRepository.findAllByFollowerId(user.getId());
-        List<Follow> followedList = followRepository.findAllByFollowedId(user.getId());
+        List<Follow> followerList = followRepository.findAllByFollowedId(user.getId());
+        List<Follow> followedList = followRepository.findAllByFollowerId(user.getId());
         if (followerList == null) {
             return ResponseEntity.ok(FollowListResponse.builder()
                     .followerList(null)
@@ -86,8 +86,8 @@ public class FollowController {
         if (user == null) {
             return null;
         }
-        Integer followerCount = followRepository.countAllByFollowerId(user.getId());
-        Integer followedCount = followRepository.countAllByFollowedId(user.getId());
+        Integer followerCount = followRepository.countAllByFollowedId(user.getId());
+        Integer followedCount = followRepository.countAllByFollowerId(user.getId());
         if(followerCount == null){
             return ResponseEntity.ok(FollowCountResponse.builder()
                     .followerCount(0)

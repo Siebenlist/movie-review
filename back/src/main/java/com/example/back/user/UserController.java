@@ -1,24 +1,15 @@
 package com.example.back.user;
 
-import com.example.back.auth.AuthResponse;
-import com.example.back.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     @GetMapping(value = "/getUserInfo")
     public ResponseEntity<UserResponse> getUserInfo(@RequestParam String username) {
@@ -35,30 +26,24 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest) {
         User user = userRepository.findUserByUsername(userRequest.getActualUsername());
         if(userRequest.getNewUsername() != null) {
-            user.setUsername(userRequest.getNewUsername());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), userRequest.getPassword()));
-            UserDetails userDetails = userRepository.findByUsername(user.getUsername())
-                    .orElseThrow();
-            String token = jwtService.getToken(userDetails);
-            return ResponseEntity.ok(AuthResponse.builder()
-                    .token(token)
-                    .build());
-        }
-        if(userRequest.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), userRequest.getPassword()));
-            UserDetails userDetails = userRepository.findByUsername(user.getUsername())
-                    .orElseThrow();
-            String token = jwtService.getToken(userDetails);
-            return ResponseEntity.ok(AuthResponse.builder()
-                    .token(token)
-                    .build());
+            if(userRepository.findUserByUsername(userRequest.getActualUsername()) != null) {
+                user.setUsername(userRequest.getNewUsername());
+                userRepository.save(user);
+                return ResponseEntity.ok("Username updated successfully");
+            }
         }
         if(userRequest.getEmail() != null) {
-            user.setEmail(userRequest.getEmail());
-            userRepository.save(user);
-            return ResponseEntity.ok("Email updated");
+            if(userRepository.findUserByEmail(userRequest.getEmail()) != null) {
+                user.setEmail(userRequest.getEmail());
+                userRepository.save(user);
+                return ResponseEntity.ok("Email updated successfully");
+            }
         }
-        return ResponseEntity.ok("Nothing updated");
+        if(userRequest.getPassword() != null) {
+            user.setPassword(userRequest.getPassword());
+            userRepository.save(user);
+            return ResponseEntity.ok("Password updated successfully");
+        }
+        return ResponseEntity.badRequest().body("Something went wrong");
     }
 }

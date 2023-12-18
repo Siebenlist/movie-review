@@ -115,11 +115,11 @@ const Followers = ({ params }) => {
                       id={follow.followed.id}
                       username={follow.followed.username}
                     />
-                    <FollowBtn
+                    {userData.user === params.username && (<FollowBtn
                       initialIsFollowing={true}
-                      followedId={follow.followed.id}
+                      followedUsername={follow.followed.username}
                       username={follow.follower.username}
-                    />
+                  />)}
                   </div>
                 );
               })
@@ -133,11 +133,12 @@ const Followers = ({ params }) => {
                       id={follow.follower.id}
                       username={follow.follower.username}
                     />
+                    {userData.user === params.username && (
                     <FollowBtn
-                      username={follow.followed.username}
-                      followedId={follow.follower.id}
-                      initialIsFollowing={isFollowing[index]}
-                    />
+                        username={follow.followed.username}
+                        followedUsername={follow.follower.username}
+                        initialIsFollowing={isFollowing[index]}
+                    />)}
                   </div>
                 );
               })}

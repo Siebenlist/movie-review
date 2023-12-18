@@ -3,13 +3,34 @@
 import { getStorageData } from "@/controllers/localStorageController";
 import { useEffect, useState } from "react";
 
-const FollowBtn = ({ initialIsFollowing, username, followedId }) => {
+const FollowBtn = ({ initialIsFollowing, username, followedUsername }) => {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const userData = JSON.parse(getStorageData());
   // const text = initialIsFollowing !== null ? "Following" : "Follow";
 
   //TODO: HACER QUE EL BOTON HAGA UN POSTEO A /FOLLOW Y CAMBIE EL TEXTO GLOBALMENTE
 
+  const getFollow = async () => {
+const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+    try {
+      const res = await fetch(
+        `http://localhost:8080/follow?username=${username}&followedUsername=${followedUsername}`,
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        data.id !== null ? setIsFollowing(true) : setIsFollowing(false);
+      }
+    } catch {
+      console.log("Mal el geteo del follow");
+    }
+  }
   const postFollow = async () => {
     const options = {
       method: "POST",
@@ -17,7 +38,7 @@ const FollowBtn = ({ initialIsFollowing, username, followedId }) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userData.token}`,
       },
-      body: JSON.stringify({ username: username, followedId: followedId }),
+      body: JSON.stringify({ username: username, followedUsername: followedUsername }),
     };
     try {
       const res = await fetch("http://localhost:8080/follow", options);

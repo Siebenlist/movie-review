@@ -77,4 +77,11 @@ public class ReviewController {
                 .build());
     }
 
+    @GetMapping(value= "/getLatestReviews")
+    public ResponseEntity<ListReviewResponse> getLatestReviews() {
+        List<Review> reviews = reviewRepository.findTop5ByOrderByIdDesc();
+        return ResponseEntity.ok(ListReviewResponse.builder()
+                .reviews(reviews)
+                .build());
+    }
 }

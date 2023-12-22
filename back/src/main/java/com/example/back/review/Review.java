@@ -39,11 +39,17 @@ public class Review {
 
     @PrePersist
     protected void onCreate() {
+        if (review == null || review.trim().isEmpty()) {
+            throw new IllegalArgumentException("La revisión no puede estar vacía");
+        }
         created_at = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
+        if (review == null || review.trim().isEmpty()) {
+            throw new IllegalArgumentException("La revisión no puede estar vacía");
+        }
         updated_at = new Date();
     }
 }

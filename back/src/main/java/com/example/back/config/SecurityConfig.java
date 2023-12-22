@@ -26,8 +26,9 @@ public class SecurityConfig {
 
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/media/**").permitAll()
+                                .requestMatchers("/auth/**", "/media/img/**", "/favList", "/getFollowList", "/getFollowCount",
+                                        "/getGlobalRating", "/getListReviewMovie", "/getLatestReviews", "/getListReviewUser",
+                                        "/watchlist").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->

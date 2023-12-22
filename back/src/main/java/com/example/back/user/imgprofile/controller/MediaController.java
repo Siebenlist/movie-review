@@ -39,7 +39,7 @@ public class MediaController {
 
     }
 
-    @GetMapping("{filename:.+}")
+    @GetMapping("/img/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         Resource file = storageService.loadResource(filename);
         String contentType = Files.probeContentType(file.getFile().toPath());

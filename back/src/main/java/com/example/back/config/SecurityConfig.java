@@ -27,7 +27,15 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/media/**").permitAll()
+                                .requestMatchers("/media/img/**").permitAll()
+                                .requestMatchers("/favList").permitAll()
+                                .requestMatchers("/getFollowList").permitAll()
+                                .requestMatchers("/getFollowCount").permitAll()
+                                .requestMatchers("/getGlobalRating").permitAll()
+                                .requestMatchers("/getListReviewMovie").permitAll()
+                                .requestMatchers("/getLatestReviews").permitAll()
+                                .requestMatchers("/getListReviewUser").permitAll()
+                                .requestMatchers("/watchlist").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->

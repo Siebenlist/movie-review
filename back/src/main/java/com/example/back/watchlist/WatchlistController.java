@@ -1,7 +1,5 @@
 package com.example.back.watchlist;
 
-import com.example.back.favourite.Favourite;
-import com.example.back.favourite.FavouriteResponse;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import lombok.RequiredArgsConstructor;

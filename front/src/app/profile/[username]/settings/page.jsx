@@ -1,14 +1,27 @@
 "use client";
 
-import { getStorageData } from "@/controllers/localStorageController";
+import {
+  deleteStorageData,
+  getStorageData,
+} from "@/controllers/localStorageController";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { userContext } from "@/context/propContext";
 
 const Settings = () => {
-  const [userInfo, setUserInfo] = useState({
-    newUsername: null,
-    email: null,
-    password: null,
-  });
+  // const [userInfo, setUserInfo] = useState({
+  //   newUsername: null,
+  //   email: null,
+  //   password: null,
+  // });
+  const [newUsername, setNewUsername] = useState();
+  const [newEmail, setNewEmail] = useState();
+  const [newPassword, setNewPassword] = useState();
+
+  const { userLogged, setUserLogged } = useContext(userContext);
+
+  const router = useRouter();
 
   const [activeField, setActiveField] = useState(null);
 
@@ -47,48 +60,53 @@ const Settings = () => {
         Authorization: `Bearer ${userData.token}`,
       },
       body: JSON.stringify({
-        actualUsername: userData.user,
-        newUsername: userInfo.newUsername,
-        email: userInfo.email,
-        password: userInfo.password,
+        actualUsername: "sieben",
+        newUsername: newUsername,
+        email: newEmail,
+        password: newPassword,
       }),
     };
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/userInfo?username=${userData.user}`,
-        options
-      );
+      const res = await fetch(`http://localhost:8080/userInfo`, options);
       if (res.ok) {
-        console.log("la userInfo se ha actualizado correctamente");
+        const data = await res.json();
+        console.log("la userInfo se ha actualizado correctamente", data);
+
+        router.push("/login");
       }
     } catch (error) {
-      console.log(error);
+      console.log("este es el error", error);
+      console.log(newUsername);
     }
   };
 
-  const handleChange = (e, fieldName) => {
-    // Verificar si hay otro campo de entrada activo y restablecerlo a null
-    if (activeField && activeField !== fieldName) {
-      setUserInfo((prevUserInfo) => ({
-        ...prevUserInfo,
-        [activeField]: null,
-      }));
-    }
+  // const handleChange = (e, fieldName) => {
+  //   // Verificar si hay otro campo de entrada activo y restablecerlo a null
+  //   if (activeField && activeField !== fieldName) {
+  //     setUserInfo((prevUserInfo) => ({
+  //       ...prevUserInfo,
+  //       [activeField]: null,
+  //     }));
+  //   }
 
-    // Actualizar el campo de entrada activo
-    setActiveField(fieldName);
+  //   // Actualizar el campo de entrada activo
+  //   setActiveField(fieldName);
 
-    // Actualizar el estado con la nueva entrada del usuario
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      [fieldName]: e.target.value,
-    }));
+  //   // Actualizar el estado con la nueva entrada del usuario
+  //   setUserInfo((prevUserInfo) => ({
+  //     ...prevUserInfo,
+  //     [fieldName]: e.target.value,
+  //   }));
+  // };
+
+  const handlePost = (fieldName, valueSetter) => (e) => {
+    valueSetter(e.target.value);
   };
 
   useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+    console.log(newUsername);
+  }, [newUsername]);
 
   return (
     <section className="flex flex-col justify-center mx-auto max-w-[900px]">
@@ -103,10 +121,9 @@ const Settings = () => {
           <div className="inline-flex items-start gap-3">
             <input
               type="text"
-              value={userInfo.newUsername || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="username"
-              onChange={(e) => handleChange(e, "username")}
+              onChange={handlePost("newUsername", setNewUsername)}
             />
             <button
               type="submit"
@@ -117,7 +134,8 @@ const Settings = () => {
             </button>
           </div>
           <p className="mt-2 text-sm">
-            Current email: <span className="font-bold text-green">sieben</span>
+            Current username:{" "}
+            <span className="font-bold text-green">{userLogged.user}</span>
           </p>
         </div>
         <div className="max-w-sm mx-auto">
@@ -127,10 +145,10 @@ const Settings = () => {
           <div className="inline-flex items-start gap-3">
             <input
               type="email"
-              value={userInfo.email || ""}
+              value={newEmail || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="email@email.com"
-              onChange={(e) => handleChange(e, "email")}
+              onChange={(e) => handlePost(e, "Email")}
             />
             <button
               type="submit"
@@ -152,10 +170,10 @@ const Settings = () => {
           <div className="inline-flex gap-3">
             <input
               type="password"
-              value={userInfo.password || ""}
+              value={newPassword || ""}
               className="bg-input border border-gray-300 text-white placeholder:text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               placeholder="password"
-              onChange={(e) => handleChange(e, "password")}
+              onChange={(e) => handlePost(e, "Password")}
             />
             <button
               type="submit"

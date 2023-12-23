@@ -1,5 +1,5 @@
 "use client";
-import { reviews } from "../data/reviews";
+
 import Link from "next/link";
 
 import bgHero from "../assets/bg-hero.jpg";
@@ -13,8 +13,36 @@ import comedyImg from "../assets/comedy-category.jpg";
 import Image from "next/image";
 import PopularMovies from "@/components/PopularMovies";
 import ReviewCard from "../components/ReviewCard";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [reviews, setReviews] = useState([]);
+
+  const getLatestReviews = async () => {
+    const options = {
+      method: "GET",
+      "Content-type": "application/json",
+    };
+
+    try {
+      const res = await fetch(
+        "http://localhost:8080/getLatestReviews",
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data.reviews);
+        setReviews(data.reviews);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getLatestReviews();
+  }, []);
+
   return (
     <main>
       <div className="h-screen text-center">
@@ -167,12 +195,10 @@ export default function Home() {
               return (
                 <ReviewCard
                   key={review.id}
-                  poster={review.poster}
-                  rating={review.rating}
-                  movie={review.movie}
-                  user={review.user}
                   review={review.review}
-                  pfp={review.pfp}
+                  date={review.created_at}
+                  user={review.user.username}
+                  rating={review.rating.rating}
                 />
               );
             })

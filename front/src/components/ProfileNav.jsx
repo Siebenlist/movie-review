@@ -15,9 +15,6 @@ const ProfileNav = () => {
       <li>
         <Link href={`/profile/${params.username}/follow`}>Followers</Link>
       </li>
-      <li>
-        <Link href={`/profile/${params.username}/settings`}>My account</Link>
-      </li>
     </ul>
   );
 };

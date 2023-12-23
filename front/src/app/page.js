@@ -17,6 +17,40 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [reviews, setReviews] = useState([]);
+  const [reviewPosterPaths, setReviewPosterPaths] = useState([]);
+
+  const fetchReviewPosters = async () => {
+    const paths = await Promise.all(
+      reviews.map(async (review) => movieDataFetch(review.movieId))
+    );
+    setReviewPosterPaths(paths);
+  };
+
+  const movieDataFetch = async (id) => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNmNhYTNjZDBlZmRjODI2ZWRhNWVkNWYyMWZlMDllMiIsInN1YiI6IjYzNmY4YjBiZDdmYmRhMDA5MDVkOTJjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0IbstPtIVklqlKXghzWLmq2AGigTFlb2cCWbPEZhf0M",
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+        options
+      );
+      const data = await response.json();
+      return {
+        path: data.poster_path,
+        id: data.id,
+        title: data.original_title,
+      };
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const getLatestReviews = async () => {
     const options = {
@@ -42,6 +76,10 @@ export default function Home() {
   useEffect(() => {
     getLatestReviews();
   }, []);
+
+  useEffect(() => {
+    fetchReviewPosters();
+  }, [reviews]);
 
   return (
     <main>
@@ -188,20 +226,23 @@ export default function Home() {
         <h3 className="text-3xl font-bold text-center mb-10 underline underline-offset-4">
           Popular reviews
         </h3>
-        <div className="flex flex-col gap-5 max-w-[1000px] justify-center">
+        <div className="flex flex-col gap-5 max-w-[1000px] justify-center items-center">
           {
             //Mapeo el array de reviews
-            reviews.map((review) => {
-              return (
-                <ReviewCard
-                  key={review.id}
-                  review={review.review}
-                  date={review.created_at}
-                  user={review.user.username}
-                  rating={review.rating.rating}
-                />
-              );
-            })
+            reviewPosterPaths.map((posterPath, index) => (
+              <ReviewCard
+                key={reviews[index].movieId}
+                review={reviews[index].review}
+                poster={posterPath.path}
+                rating={reviews[index].rating.rating}
+                movie={posterPath.title}
+                date={
+                  reviews[index].updated_at !== null
+                    ? reviews[index].updated_at
+                    : reviews[index].created_at
+                }
+              />
+            ))
           }
         </div>
       </section>

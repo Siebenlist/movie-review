@@ -79,7 +79,7 @@ const DropdownMenu = () => {
       <ul
         onMouseEnter={handleDropdown}
         onMouseLeave={closeDropdown}
-        className={`flex-col flex-wrap h-[250px] bg-slate md:bg-menu text-black md:text-white text-center rounded-md absolute z-40 ${
+        className={`flex-col flex-wrap max-h-[500px] bg-slate md:bg-menu text-black md:text-white text-center rounded-md absolute z-40 ${
           open ? "flex" : "hidden"
         }`}
       >

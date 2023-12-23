@@ -24,7 +24,13 @@ public class MediaController {
     @PostMapping(value = "/upload")
     public Map<String, String> uploadFile(@RequestParam("File") MultipartFile multipartFile,
                                           @RequestParam("usuario") String usuario) {
+        if(multipartFile.isEmpty()){
+
+            throw new RuntimeException("Failed to store empty file");
+        }
         try{
+
+            System.out.println("Tamaño del archivo: " + multipartFile.getSize());
             String path = storageService.store(multipartFile, usuario);
             //System.out.println(path);
             String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");

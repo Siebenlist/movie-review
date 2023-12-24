@@ -41,7 +41,6 @@ const MoviePage = ({ params }) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 

@@ -74,7 +74,6 @@ const Profile = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 
@@ -94,7 +93,6 @@ const Profile = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 

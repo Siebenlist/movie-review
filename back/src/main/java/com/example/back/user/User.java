@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 16)
     @NotBlank(message = "This field cannot be empty")
     String username;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     @Email(message = "Invalid email address")
     @NotBlank(message = "This field cannot be empty")
     String email;

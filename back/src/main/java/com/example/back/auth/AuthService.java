@@ -5,7 +5,6 @@ import com.example.back.user.Role;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +31,7 @@ public class AuthService {
                 .build();
     }
 
-    public ResponseEntity<?> register(@Valid RegisterRequest registerRequest, BindingResult result){
-        if(result.hasErrors()){
-            return ResponseEntity.badRequest().body("Validation failed: " + result.getAllErrors());
-        }
+    public AuthResponse register(RegisterRequest registerRequest){
         User user = User.builder()
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode( registerRequest.getPassword()))
@@ -44,6 +39,6 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        return ResponseEntity.ok(AuthResponse.builder().token(jwtService.getToken(user)).build());
+        return AuthResponse.builder().token(jwtService.getToken(user)).build();
     }
 }

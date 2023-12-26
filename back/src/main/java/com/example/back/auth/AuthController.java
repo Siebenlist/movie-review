@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,11 +15,7 @@ import jakarta.validation.Valid;
 public class AuthController {
     private final AuthService authService;
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
-        if(result.hasErrors()){
-            return ResponseEntity.badRequest().body("Errores de validación: " + result.getAllErrors());
-        }
-        
+    public ResponseEntity<?> login( @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
     @PostMapping(value = "/register")

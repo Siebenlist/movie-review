@@ -1,14 +1,11 @@
 "use client";
 
 import MoviePoster from "@/components/MoviePoster";
-import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ListPage = ({ params }) => {
   const [movies, setMovies] = useState();
   const [pageNumber, setPageNumber] = useState(1);
-
-  const router = useRouter();
 
   const handleMovies = async (genre) => {
     const options = {

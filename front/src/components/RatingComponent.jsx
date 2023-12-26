@@ -19,7 +19,6 @@ const RatingComponent = () => {
       method: "GET",
       headers: {
         "content-type": "Application/json",
-        Authorization: `Bearer ${userData.token},`,
       },
     };
 
@@ -128,7 +127,9 @@ const RatingComponent = () => {
 
   useEffect(() => {
     getGlobalRatings();
-    getRating();
+    if (userData) {
+      getRating();
+    }
   }, [currentRating]);
 
   return (

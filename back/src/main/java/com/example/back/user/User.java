@@ -30,9 +30,10 @@ public class User implements UserDetails {
     @GeneratedValue
     Integer id;
     @Basic
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false)
+    @Size(min = 4, max = 12, message = "The username must be between 4 and 12 characters")
     String username;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     @Email(message = "Invalid email address")
     String email;
     @Column(nullable = false)

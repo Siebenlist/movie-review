@@ -16,12 +16,14 @@ const Followers = ({ params }) => {
   const inverseFollow = async (follow) => {
     return new Promise((resolve, reject) => {
       const found = followingList.some((followCheck) => {
-        return followCheck.followed.id === follow.follower.id && followCheck.follower.id === follow.followed.id;
+        return (
+          followCheck.followed.id === follow.follower.id &&
+          followCheck.follower.id === follow.followed.id
+        );
       });
       resolve(found);
     });
   };
-  
 
   const checkFollow = async (follow) => {
     try {
@@ -49,7 +51,6 @@ const Followers = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
     try {
@@ -72,7 +73,7 @@ const Followers = ({ params }) => {
   const fetchIsFollowing = async () => {
     try {
       setLoadingFollow(true);
-      const promises = followersList.map(follow => checkFollow(follow));
+      const promises = followersList.map((follow) => checkFollow(follow));
       const results = await Promise.all(promises);
       setIsFollowing(results);
     } catch (error) {
@@ -87,10 +88,8 @@ const Followers = ({ params }) => {
   }, [followToggle]);
 
   useEffect(() => {
-  
     fetchIsFollowing();
   }, [followersList]);
-
 
   return (
     <section>
@@ -126,12 +125,14 @@ const Followers = ({ params }) => {
                       id={follow.followed.id}
                       username={follow.followed.username}
                     />
-                    {userData.user === params.username && (<FollowBtn
-                      initialIsFollowing={true}
-                      followedUsername={follow.followed.username}
-                      username={follow.follower.username}
-                      onFollowChange={handleFollowChange}
-                  />)}
+                    {userData.user === params.username && (
+                      <FollowBtn
+                        initialIsFollowing={true}
+                        followedUsername={follow.followed.username}
+                        username={follow.follower.username}
+                        onFollowChange={handleFollowChange}
+                      />
+                    )}
                   </div>
                 );
               })
@@ -145,15 +146,13 @@ const Followers = ({ params }) => {
                       id={follow.follower.id}
                       username={follow.follower.username}
                     />
-                    {userData.user === params.username && (
-                        !loadingFollow && (
-                            <FollowBtn
-                                username={follow.followed.username}
-                                followedUsername={follow.follower.username}
-                                initialIsFollowing={isFollowing[index]}
-                                onFollowChange={handleFollowChange}
-                            />
-                        )
+                    {userData.user === params.username && !loadingFollow && (
+                      <FollowBtn
+                        username={follow.followed.username}
+                        followedUsername={follow.follower.username}
+                        initialIsFollowing={isFollowing[index]}
+                        onFollowChange={handleFollowChange}
+                      />
                     )}
                   </div>
                 );

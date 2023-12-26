@@ -31,13 +31,16 @@ public class User implements UserDetails {
     Integer id;
     @Basic
     @Column(nullable = false, length = 16)
+    @NotBlank(message = "This field cannot be empty")
     String username;
     @Column(nullable = false, length = 50)
     @Email(message = "Invalid email address")
+    @NotBlank(message = "This field cannot be empty")
     String email;
     @Column(nullable = false)
     @Size(min = 8, message = "Your password must be at least 8 characters")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Your password must have at least one capital letter, one lower case and one number")
+    @NotBlank(message = "This field cannot be empty")
     String password;
     @Enumerated(EnumType.STRING)
     Role role;

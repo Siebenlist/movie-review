@@ -9,6 +9,7 @@ import { userContext } from "@/context/propContext";
 import { useContext } from "react";
 
 const Register = () => {
+  const [errors, setErrors] = useState(null);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +31,11 @@ const Register = () => {
         body: JSON.stringify(submitData),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        const error = await response.text();
+        console.log(error);
+        setErrors([error]);
+      } else {
         const data = await response.json();
         console.log(data);
         const datatoken = data.token.split(".")[1];
@@ -46,8 +51,6 @@ const Register = () => {
 
         router.push("/");
         router.refresh();
-      } else {
-        console.error("Registracion fallada");
       }
     } catch (error) {
       console.error("Error en el registro:", error);
@@ -88,7 +91,18 @@ const Register = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
-
+        {errors && (
+          <div style={{ color: "red" }}>
+            <p>Error:</p>
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>
+                  <p className="text-white">{error}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <label htmlFor="" className="text-white">
           <input type="checkbox" className="mr-3" />I agree with the{" "}
           <a href="#" className="text-button">

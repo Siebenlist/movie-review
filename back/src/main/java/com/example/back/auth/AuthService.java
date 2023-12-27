@@ -18,14 +18,14 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    public AuthResponse login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        UserDetails userDetails = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow();
-        String token = jwtService.getToken(userDetails);
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+    public AuthResponse login(LoginRequest loginRequest) throws IllegalArgumentException {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            UserDetails userDetails = userRepository.findByUsername(loginRequest.getUsername())
+                    .orElseThrow();
+            String token = jwtService.getToken(userDetails);
+            return AuthResponse.builder()
+                    .token(token)
+                    .build();
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {

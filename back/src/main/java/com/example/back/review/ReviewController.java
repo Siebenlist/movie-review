@@ -1,5 +1,6 @@
 package com.example.back.review;
 
+import com.example.back.ExceptionHandler.CustomException;
 import com.example.back.rating.Rating;
 import com.example.back.rating.RatingRepository;
 import com.example.back.user.User;
@@ -23,7 +24,7 @@ public class ReviewController {
         Review actualReview = reviewRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
         Rating actualRating = ratingRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
         if(actualRating == null) {
-            return null;
+            throw new CustomException(400, "You need to rate the movie first");
         }
         if (actualReview == null) {
             Review review = Review.builder()
@@ -48,11 +49,12 @@ public class ReviewController {
     @GetMapping(value = "/getReview")
     public ResponseEntity<ReviewResponse> getReview(@RequestParam Integer movieId, @RequestParam String username) {
         User user = userRepository.findUserByUsername(username);
+        if(user == null){
+            throw new IllegalArgumentException("You must to be logged to review a movie");
+        }
         Review review = reviewRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (review == null) {
-            return ResponseEntity.ok(ReviewResponse.builder()
-                    .id(null)
-                    .build());
+            return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(ReviewResponse.builder()
                     .id(review.getId())
@@ -71,6 +73,9 @@ public class ReviewController {
     @GetMapping(value = "/getListReviewUser")
     public ResponseEntity<ListReviewResponse> getListReviewUser(@RequestParam String username) {
         User user = userRepository.findUserByUsername(username);
+        if(user == null){
+            throw new IllegalArgumentException("You must to be logged to review a movie");
+        }
         List<Review> reviews = reviewRepository.findAllByUserId(user.getId());
         return ResponseEntity.ok(ListReviewResponse.builder()
                 .reviews(reviews)

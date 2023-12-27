@@ -17,7 +17,7 @@ public class WatchlistController {
         String username = watchlistRequest.getUsername();
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must to be logged to have a watchlist");
         }
         Watchlist watch = watchlistRepository.findByMovieIdAndUserId(watchlistRequest.getMovieId(), user.getId());
         if (watch == null) {
@@ -31,23 +31,18 @@ public class WatchlistController {
                     .build());
         }
         watchlistRepository.delete(watch);
-        return ResponseEntity.ok(WatchlistResponse.builder()
-                .id(null)
-                .build());
-
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping(value = "/watchlisted")
     public ResponseEntity<WatchlistResponse> getSingularWatchlist(@RequestParam String username, @RequestParam Integer movieId) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must to be logged to have a watchlist");
         }
         Watchlist watch = watchlistRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (watch == null) {
-            return ResponseEntity.ok(WatchlistResponse.builder()
-                    .id(null)
-                    .build());
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(WatchlistResponse.builder()
                 .id(watch.getId())
@@ -58,7 +53,7 @@ public class WatchlistController {
     public ResponseEntity<WatchlistUserResponse> getWatchlist(@RequestParam String username) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must to be logged to have a watchlist");
         }
         return ResponseEntity.ok(WatchlistUserResponse.builder()
                 .watchlist(watchlistRepository.findAllByUserId(user.getId()))

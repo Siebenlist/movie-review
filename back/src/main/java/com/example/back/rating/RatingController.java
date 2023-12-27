@@ -20,7 +20,7 @@ public class RatingController {
     public ResponseEntity<?> handleRating(@RequestBody RatingRequest ratingRequest) {
         User user = userRepository.findUserByUsername(ratingRequest.getUsername());
         if(user == null) {
-            throw new RuntimeException("You must be logged to rate a movie");
+            throw new IllegalArgumentException("You must be logged to rate a movie");
         }
         Rating actualRating = ratingRepository.findByMovieIdAndUserId(ratingRequest.getMovieId(), user.getId());
         if (actualRating == null) {
@@ -52,7 +52,7 @@ public class RatingController {
         }
         Rating rating = ratingRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (rating == null) {
-            throw new CustomException(400, "Rating not found");
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(RatingResponse.builder()
                 .id(rating.getId())

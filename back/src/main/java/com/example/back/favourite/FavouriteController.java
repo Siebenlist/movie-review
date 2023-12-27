@@ -18,7 +18,7 @@ public class FavouriteController {
         String username = favouriteRequest.getUsername();
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must be logged to fav a movie");
         }
         Favourite fav = favouriteRepository.findByMovieIdAndUserId(favouriteRequest.getMovieId(), user.getId());
         if (fav == null) {
@@ -32,9 +32,7 @@ public class FavouriteController {
                     .build());
         }
         favouriteRepository.delete(fav);
-        return ResponseEntity.ok(FavouriteResponse.builder()
-                .id(null)
-                .build());
+        return ResponseEntity.accepted().build();
     }
 
     //Get para devolver la pelicula si esta fav o no
@@ -42,13 +40,11 @@ public class FavouriteController {
     public ResponseEntity<FavouriteResponse> getFav(@RequestParam String username, @RequestParam Integer movieId) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must be logged to fav a movie");
         }
         Favourite fav = favouriteRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (fav == null) {
-            return ResponseEntity.ok(FavouriteResponse.builder()
-                    .id(null)
-                    .build());
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(FavouriteResponse.builder()
                 .id(fav.getId())
@@ -59,7 +55,7 @@ public class FavouriteController {
     public ResponseEntity<FavListResponse> getFavList(@RequestParam String username) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new IllegalArgumentException("You must be logged to fav a movie");
         }
         FavListResponse favListResponse = FavListResponse.builder()
                 .favourites(favouriteRepository.findAllByUserId(user.getId()))

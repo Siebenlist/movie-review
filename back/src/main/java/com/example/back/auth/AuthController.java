@@ -14,10 +14,12 @@ public class AuthController {
     private final AuthService authService;
     @PostMapping(value = "/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(authService.login(loginRequest));
+        AuthResponse response = authService.login(loginRequest);
+        return ResponseEntity.ok(response);
     }
     @PostMapping(value = "/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authService.register(registerRequest));
+        AuthResponse response = authService.register(registerRequest);
+        return ResponseEntity.ok(response);
     }
 }

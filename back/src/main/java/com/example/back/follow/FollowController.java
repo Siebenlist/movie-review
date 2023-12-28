@@ -23,7 +23,7 @@ public class FollowController {
             throw new IllegalArgumentException("You must be logged to follow someone");
         }
         if (followed == null) {
-            throw new CustomException(400, "User not found");
+            throw new CustomException(404, "User not found");
         }
         Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followed.getId());
         if (follow == null) {

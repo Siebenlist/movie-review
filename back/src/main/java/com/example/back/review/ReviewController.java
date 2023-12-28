@@ -23,26 +23,30 @@ public class ReviewController {
         User user = userRepository.findUserByUsername(reviewRequest.getUsername());
         Review actualReview = reviewRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
         Rating actualRating = ratingRepository.findByMovieIdAndUserId(reviewRequest.getMovieId(), user.getId());
+        String reviewText = reviewRequest.getReview();
         if(actualRating == null) {
-            throw new CustomException(400, "You need to rate the movie first");
+            throw new CustomException(406, "You need to rate the movie first");
+        }
+        if(!(reviewText.length() > 10 && reviewText.length() < 255)){
+            throw new CustomException(406, "Review must be between 10 and 255 characters");
         }
         if (actualReview == null) {
-            Review review = Review.builder()
-                    .movieId(reviewRequest.getMovieId())
-                    .review(reviewRequest.getReview())
-                    .rating(actualRating)
-                    .user(user)
-                    .build();
-            reviewRepository.save(review);
-            return ResponseEntity.ok(ReviewResponse.builder()
-                    .id(review.getId())
-                    .build());
+                Review review = Review.builder()
+                        .movieId(reviewRequest.getMovieId())
+                        .review(reviewText)
+                        .rating(actualRating)
+                        .user(user)
+                        .build();
+                reviewRepository.save(review);
+                return ResponseEntity.ok(ReviewResponse.builder()
+                        .id(review.getId())
+                        .build());
         } else {
-            actualReview.setReview(reviewRequest.getReview());
-            reviewRepository.save(actualReview);
-            return ResponseEntity.ok(ReviewResponse.builder()
-                    .id(actualReview.getId())
-                    .build());
+        actualReview.setReview(reviewText);
+        reviewRepository.save(actualReview);
+        return ResponseEntity.ok(ReviewResponse.builder()
+                .id(actualReview.getId())
+                .build());
         }
     }
 

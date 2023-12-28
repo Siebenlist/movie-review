@@ -5,7 +5,10 @@ import com.example.back.jwt.JwtService;
 import com.example.back.user.Role;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +43,7 @@ public class AuthService {
                     .token(token)
                     .build();
     }
+
 
     public AuthResponse register(RegisterRequest registerRequest) {
         if(registerRequest.getUsername() == null || registerRequest.getPassword() == null || registerRequest.getEmail() == null) {

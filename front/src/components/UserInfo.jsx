@@ -1,6 +1,6 @@
 import FollowBtn from "./FollowBtn";
 
-const UserInfo = ({ id, username, pfp, favs, followers, following }) => {
+const UserInfo = ({ id, username, pfp }) => {
   return (
     <article className="flex justify-between items-center p-5" key={id}>
       <div className="flex items-center gap-5">
@@ -11,16 +11,7 @@ const UserInfo = ({ id, username, pfp, favs, followers, following }) => {
             alt={`${username}'s profile picture`}
           />
         </div>
-        <div className="flex flex-col md:flex-row md:gap-5">
-          <h3 className="font-bold">{username}</h3>
-          <div className="flex gap-3">
-            <p>{favs}k</p>
-            <p>{followers}k</p>
-          </div>
-        </div>
-      </div>
-      <div>
-        <FollowBtn initialIsFollowing={following} />
+        <h3 className="font-bold">{username}</h3>
       </div>
     </article>
   );

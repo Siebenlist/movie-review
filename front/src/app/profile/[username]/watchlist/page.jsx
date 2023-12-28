@@ -46,7 +46,6 @@ const Watchlist = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 
@@ -80,16 +79,20 @@ const Watchlist = ({ params }) => {
           <p className="text-slate uppercase">Fav films</p>
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-6 auto-rows-max mt-2 place-items-center gap-2 p-5 w-full h-[500px] overflow-y-scroll">
-          {watchlistPosters.map((watchlistItem, index) => {
-            return (
+        <div className="relative grid grid-cols-3 md:grid-cols-6 auto-rows-max mt-2 place-items-center gap-2 p-5 w-full h-[500px] overflow-y-scroll">
+          {watchlist.length === 0 ? (
+            <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center text-slate">
+              You don't have movies for later.
+            </p>
+          ) : (
+            watchlistPosters.map((watchlistItem, index) => (
               <MoviePoster
-                key={watchlistItem.id} // Corregir la clave a watchlist[index].id
+                key={watchlistItem.id}
                 id={watchlist[index].movieId}
                 poster={watchlistPosters[index].path}
               />
-            );
-          })}
+            ))
+          )}
         </div>
       </div>
     </section>

@@ -1,13 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import DropdownMenu from "./DropdownMenu";
 import HamburgerMenu from "./HamburgerMenu";
-import searchIcon from "../assets/searchIcon.svg";
-import {
-  deleteStorageData,
-  getStorageData,
-} from "@/controllers/localStorageController";
+
+import Searchbar from "./Searchbar";
+import { deleteStorageData } from "@/controllers/localStorageController";
 
 import { userContext } from "@/context/propContext";
 import { useContext } from "react";
@@ -36,21 +33,7 @@ const NavLogged = () => {
 
       <ul className="hidden md:flex items-center gap-10 text-lg">
         <li>
-          <form>
-            <label className="flex gap-2">
-              <input
-                className="w-40 py-1 px-3 rounded-full bg-input text-white placeholder:text-white"
-                type="search"
-                name=""
-                id=""
-                placeholder="Search"
-              />
-
-              <button type="submit">
-                <img className="w-[20px]" src={searchIcon.src} alt="" />
-              </button>
-            </label>
-          </form>
+          <Searchbar />
         </li>
         <li>
           <DropdownMenu />

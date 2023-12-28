@@ -17,7 +17,7 @@ public class FollowController {
     @PostMapping(value = "/follow")
     public ResponseEntity<FollowResponse> handleFollow(@RequestBody FollowRequest followRequest) {
         User user = userRepository.findUserByUsername(followRequest.getUsername());
-        User followed = userRepository.findUserById(followRequest.getFollowedId());
+        User followed = userRepository.findUserByUsername(followRequest.getFollowedUsername());
         if (user == null || followed == null) {
             return null;
         }
@@ -40,12 +40,13 @@ public class FollowController {
     }
 
     @GetMapping(value = "/getFollow")
-    public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam Integer followedId) {
+    public ResponseEntity<FollowResponse> getFollow(@RequestParam String username, @RequestParam String followedUsername) {
         User user = userRepository.findUserByUsername(username);
+        User followed = userRepository.findUserByUsername(followedUsername);
         if (user == null) {
             return null;
         }
-        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followedId);
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(user.getId(), followed.getId());
         if (follow == null) {
             return ResponseEntity.ok(FollowResponse.builder()
                     .id(null)
@@ -55,35 +56,55 @@ public class FollowController {
                 .id(follow.getId())
                 .build());
     }
-    @GetMapping(value = "/getFollowCount")
-    public ResponseEntity<FollowCountResponse> getFollowCount(@RequestParam String username) {
+    @GetMapping(value = "/getFollowList")
+    public ResponseEntity<FollowListResponse> getFollowList(@RequestParam String username) {
         User user = userRepository.findUserByUsername(username);
         if (user == null) {
             return null;
         }
-        List<Follow> followerList = followRepository.findAllByFollowerId(user.getId());
-        List<Follow> followedList = followRepository.findAllByFollowedId(user.getId());
+        List<Follow> followerList = followRepository.findAllByFollowedId(user.getId());
+        List<Follow> followedList = followRepository.findAllByFollowerId(user.getId());
         if (followerList == null) {
-            return ResponseEntity.ok(FollowCountResponse.builder()
-                    .followerCount(0)
-                    .followedCount(followedList.size())
+            return ResponseEntity.ok(FollowListResponse.builder()
                     .followerList(null)
                     .followedList(followedList)
                     .build());
         } else if (followedList == null) {
-            return ResponseEntity.ok(FollowCountResponse.builder()
-                    .followerCount(followerList.size())
-                    .followedCount(0)
+            return ResponseEntity.ok(FollowListResponse.builder()
                     .followerList(followerList)
                     .followedList(null)
                     .build());
 
         }
-        return ResponseEntity.ok(FollowCountResponse.builder()
-                .followerCount(followerList.size())
-                .followedCount(followedList.size())
+        return ResponseEntity.ok(FollowListResponse.builder()
                 .followerList(followerList)
                 .followedList(followedList)
                 .build());
     }
+    @GetMapping(value = "/getFollowCount")
+    public ResponseEntity<FollowCountResponse> getFollowCount(@RequestParam String username){
+        User user = userRepository.findUserByUsername(username);
+        if (user == null) {
+            return null;
+        }
+        Integer followerCount = followRepository.countAllByFollowedId(user.getId());
+        Integer followedCount = followRepository.countAllByFollowerId(user.getId());
+        if(followerCount == null){
+            return ResponseEntity.ok(FollowCountResponse.builder()
+                    .followerCount(0)
+                    .followedCount(followedCount)
+                    .build());
+        }
+        if (followedCount == null){
+            return ResponseEntity.ok(FollowCountResponse.builder()
+                    .followerCount(followerCount)
+                    .followedCount(0)
+                    .build());
+        }
+        return ResponseEntity.ok(FollowCountResponse.builder()
+                .followerCount(followerCount)
+                .followedCount(followedCount)
+                .build());
+    }
+
 }

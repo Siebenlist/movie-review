@@ -74,7 +74,6 @@ const Profile = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 
@@ -94,7 +93,6 @@ const Profile = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 
@@ -127,42 +125,56 @@ const Profile = ({ params }) => {
 
   return (
     <section className="flex flex-col justify-center my-5 max-w-[1200px] mx-auto">
-      <article className="">
-        <div>
+      <article className="w-full">
+        <div className="w-[500px] md:w-[900px]">
           <p className="text-slate uppercase">Fav films</p>
-          <div className="max-w-full h-[1px] bg-gray"></div>
+          <div className="min-w-full h-[1px] bg-gray"></div>
         </div>
         <div
           ref={sliderRef}
-          className="keen-slider flex gap-3 w-full mt-2 animate-fade-in"
+          className="keen-slider flex gap-3 w-full h-full mt-2 animate-fade-in"
         >
-          {favPosterPaths.map((posterPath, index) => (
-            <div key={favList[index].movieId}>
-              <MoviePoster
-                poster={posterPath.path}
-                id={favList[index].movieId}
-              />
-            </div>
-          ))}
+          {favList.length === 0 ? (
+            <p className="m-auto text-slate">
+              Looks like you dont have any favourite films.
+            </p>
+          ) : (
+            favPosterPaths.map((posterPath, index) => (
+              <div key={favList[index].movieId}>
+                <MoviePoster
+                  poster={posterPath.path}
+                  id={favList[index].movieId}
+                />
+              </div>
+            ))
+          )}
         </div>
       </article>
 
-      <article className="flex flex-col gap-5 my-[100px]">
-        <div>
+      <article className="flex flex-col gap-5 my-[100px] w-full">
+        <div className="w-full">
           <p className="text-slate uppercase">Recent reviews</p>
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>
         <div className="flex flex-col gap-2 divide-y border-b-[1px] border-gray divide-slate">
-          {reviewPosterPaths.map((posterPath, index) => (
-            <ReviewCard
-              key={reviewList[index].movieId}
-              review={reviewList[index].review}
-              poster={posterPath.path}
-              rating={reviewList[index].rating.rating}
-              movie={posterPath.title}
-              date={reviewList[index].date}
-            />
-          ))}
+          {reviewList.length === 0 ? (
+            <p>You dont have reviews yet.</p>
+          ) : (
+            reviewPosterPaths.map((posterPath, index) => (
+              <ReviewCard
+                key={reviewList[index].movieId}
+                review={reviewList[index].review}
+                poster={posterPath.path}
+                rating={reviewList[index].rating.rating}
+                movie={posterPath.title}
+                date={
+                  reviewList[index].updated_at !== null
+                    ? reviewList[index].updated_at
+                    : reviewList[index].created_at
+                }
+              />
+            ))
+          )}
         </div>
       </article>
     </section>

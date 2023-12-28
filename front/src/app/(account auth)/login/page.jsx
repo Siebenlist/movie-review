@@ -55,7 +55,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col max-w-[400px] p-10 bg-primary gap-5 mx-auto">
+    <div className="flex flex-col max-w-[400px] p-10 bg-primary gap-5 m-auto">
       <h1 className="text-4xl font-bold">Login</h1>
       <form
         className="flex flex-col gap-10  text-black"

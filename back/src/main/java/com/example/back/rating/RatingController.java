@@ -1,10 +1,8 @@
 package com.example.back.rating;
 
-import com.example.back.favourite.FavouriteResponse;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

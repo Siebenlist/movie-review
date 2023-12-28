@@ -23,8 +23,6 @@ export default function RootLayout({ children }) {
           {user ? <NavLogged /> : <NotLoggedNav />}
 
           {children}
-
-          <Footer />
         </body>
       </SessionContextProvider>
     </html>

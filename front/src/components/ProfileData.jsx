@@ -1,18 +1,62 @@
-"use client";
 import { useParams } from "next/navigation";
 import FollowBtn from "./FollowBtn";
 import { getStorageData } from "@/controllers/localStorageController";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
 const ProfileData = () => {
   const params = useParams();
   const userData = JSON.parse(getStorageData());
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const checkFollow = async () => {
+    try {
+      const results = await getFollow();
+      setIsFollowing(results);
+    } catch (error) {
+      console.error("Error checking follow:", error);
+    } finally {
+      // Indicar que la carga ha finalizado, sin importar si hubo éxito o error
+      setLoading(false);
+    }
+  };
+
+  const getFollow = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+    try {
+      const res = await fetch(
+        `http://localhost:8080/getFollow?username=${userData.user}&followedUsername=${params.username}`,
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        return data.id !== null;
+      } else {
+        throw new Error("Response not ok");
+      }
+    } catch (error) {
+      console.error("Error in getFollow:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      checkFollow();
+    }
+  }, []);
 
   //Codigo para subir imagenes
   const [image, setImage] = useState(null);
-  
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -22,17 +66,17 @@ const ProfileData = () => {
     console.log('Tipo de image:', typeof image);
     console.log(userData.token);
 
-   
+
 
   };
 
   const handleUpload = async () => {
-   
+
 
     try {
       const formData = new FormData();
-      
-      
+
+
       formData.append('File', image);
       formData.append('usuario', params.username);
 
@@ -45,12 +89,12 @@ const ProfileData = () => {
       const response = await fetch('http://localhost:8080/media/upload', {
         method: 'POST',
         headers: {
-          
+
           Authorization: `Bearer ${userData.token}`,
         },
         body: formData,
       });
-      
+
       const responseData = await response.json();
       console.log('Respuesta del servidor:', responseData);
       console.log(formData)
@@ -81,7 +125,7 @@ const ProfileData = () => {
             }
             <input type="file" accept="image/*" onChange={handleImageChange} />
             <button className="bg-white text-black" onClick={handleUpload}>Subir la imagen</button>
-            
+
             <p>
               Favs <span className="font-bold">3.3k</span>
             </p>
@@ -91,7 +135,19 @@ const ProfileData = () => {
           </div>
         </div>
       </div>
-      {userData.user !== params.username && <FollowBtn />}
+      {userData ? (
+        userData.user !== params.username && !loading ? (
+          <FollowBtn
+            initialIsFollowing={isFollowing}
+            username={userData.user}
+            followedUsername={params.username}
+          />
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
     </div>
   );
 };

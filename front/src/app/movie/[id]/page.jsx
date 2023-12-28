@@ -41,7 +41,6 @@ const MoviePage = ({ params }) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userData.token}`,
       },
     };
 
@@ -103,6 +102,11 @@ const MoviePage = ({ params }) => {
                 user={review.user.username}
                 pfp={
                   "https://hips.hearstapps.com/hmg-prod/images/dl-u525201-016-1673780958.jpg?crop=0.7234375xw:1xh;center,top&resize=640:*"
+                }
+                date={
+                  review.updated_at !== null
+                    ? review.updated_at
+                    : review.created_at
                 }
               />
             );

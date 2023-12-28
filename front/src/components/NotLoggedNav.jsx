@@ -2,6 +2,7 @@ import HamburgerMenu from "./HamburgerMenu";
 import DropdownMenu from "./DropdownMenu";
 import searchIcon from "../assets/searchIcon.svg";
 import Link from "next/link";
+import Searchbar from "./Searchbar";
 
 const NotLoggedNav = () => {
   return (
@@ -14,21 +15,7 @@ const NotLoggedNav = () => {
 
       <div className="hidden md:flex items-center gap-5">
         <DropdownMenu />
-        <form className="flex gap-2">
-          <label className="flex gap-2">
-            <input
-              className="w-40 py-1 px-3 rounded-full bg-input text-white placeholder:text-white"
-              type="search"
-              name=""
-              id=""
-              placeholder="Search"
-            />
-
-            <button type="submit">
-              <img className="w-[20px]" src={searchIcon.src} alt="" />
-            </button>
-          </label>
-        </form>
+        <Searchbar />
         <Link
           href="/login"
           className="py-1 px-6 bg-button hover:bg-buttonHover duration-200 font-bold rounded-sm"

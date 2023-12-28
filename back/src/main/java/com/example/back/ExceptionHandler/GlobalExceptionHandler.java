@@ -1,6 +1,8 @@
 package com.example.back.ExceptionHandler;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,9 +17,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<String> handlerCustomException(CustomException exception){
-        return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>(exception.getMessage(), HttpStatusCode.valueOf(exception.getStatusCode()));
     }
-
-
 
 }

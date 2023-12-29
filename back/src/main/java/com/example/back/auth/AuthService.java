@@ -27,9 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     public AuthResponse login(LoginRequest loginRequest) {
-        String username = loginRequest.getUsername();
-        String password = loginRequest.getPassword();
-        if(username == null || password == null) {
+        if(loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
             throw new CustomException(400, "The fields can't be empty");
         }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

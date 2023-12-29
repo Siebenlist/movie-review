@@ -35,9 +35,6 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         UserDetails userDetails = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new CustomException(404, "User doesn't exist"));
-        if(!Objects.equals(passwordEncoder.encode(password), userDetails.getPassword())) {
-            throw new CustomException(401, "Wrong password");
-        }
         String token = jwtService.getToken(userDetails);
         return AuthResponse.builder()
                     .token(token)

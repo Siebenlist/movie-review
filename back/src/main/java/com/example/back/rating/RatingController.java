@@ -1,5 +1,6 @@
 package com.example.back.rating;
 
+import com.example.back.ExceptionHandler.CustomException;
 import com.example.back.user.User;
 import com.example.back.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class RatingController {
     public ResponseEntity<?> handleRating(@RequestBody RatingRequest ratingRequest) {
         User user = userRepository.findUserByUsername(ratingRequest.getUsername());
         if(user == null) {
-            return null;
+            throw new IllegalArgumentException("You must be logged to rate a movie");
         }
         Rating actualRating = ratingRepository.findByMovieIdAndUserId(ratingRequest.getMovieId(), user.getId());
         if (actualRating == null) {
@@ -47,16 +48,11 @@ public class RatingController {
     public ResponseEntity<RatingResponse> getRating(@RequestParam String username, @RequestParam Integer movieId) {
         User user = userRepository.findUserByUsername(username);
         if(user == null) {
-            return null;
+            throw new IllegalArgumentException("You must be logged to rate a movie");
         }
         Rating rating = ratingRepository.findByMovieIdAndUserId(movieId, user.getId());
         if (rating == null) {
-            //return new ResponseEntity<>(HttpStatus.NOT_FOUND); //Si no encuentra el rating me devuelve un 404
-
-            return ResponseEntity.ok(RatingResponse.builder()
-                    .id(null)
-                    .rating(null)
-                    .build());
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(RatingResponse.builder()
                 .id(rating.getId())

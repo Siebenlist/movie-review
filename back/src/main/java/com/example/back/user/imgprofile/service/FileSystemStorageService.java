@@ -1,5 +1,6 @@
 package com.example.back.user.imgprofile.service;
 
+import com.example.back.ExceptionHandler.CustomException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -43,7 +44,7 @@ public class FileSystemStorageService implements StorageService {
         String extension = filename.substring(filename.lastIndexOf("."));
 
         if(!extension.equals(".jpg")){
-            throw new RuntimeException("No se permite otro formato que no sea .jpg");
+            throw new CustomException(406, "Only .jpg format supported");
         }
 
         System.out.println(nombre + " " + extension);
@@ -72,7 +73,7 @@ public class FileSystemStorageService implements StorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("Could not read the file" + filename);
+                throw new CustomException(404, "Resource not found");
             }
 
         } catch (MalformedURLException e) {

@@ -1,5 +1,6 @@
 package com.example.back.user.imgprofile.controller;
 
+import com.example.back.ExceptionHandler.CustomException;
 import com.example.back.user.imgprofile.service.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,7 @@ public class MediaController {
     public Map<String, String> uploadFile(@RequestParam("File") MultipartFile multipartFile,
                                           @RequestParam("usuario") String usuario) {
         if(multipartFile.isEmpty()){
-
-            throw new RuntimeException("Failed to store empty file");
+            throw new CustomException(400, "You have to choose a image first");
         }
         try{
 

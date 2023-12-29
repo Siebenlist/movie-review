@@ -1,6 +1,7 @@
 package com.example.back.user.imgprofile.controller;
 
 import com.example.back.ExceptionHandler.CustomException;
+import com.example.back.user.UserRepository;
 import com.example.back.user.imgprofile.service.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class MediaController {
     private final StorageService storageService;
     private final HttpServletRequest request;
+    private final UserRepository userRepository;
 
     @PostMapping(value = "/upload")
     public Map<String, String> uploadFile(@RequestParam("File") MultipartFile multipartFile,
@@ -49,6 +51,9 @@ public class MediaController {
     @GetMapping("{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         Resource file = storageService.loadResource(filename);
+        if(file == null){
+            throw new CustomException(404, "File not found");
+        }
         String contentType = Files.probeContentType(file.getFile().toPath());
 
         return ResponseEntity.ok()

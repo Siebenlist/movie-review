@@ -1,7 +1,10 @@
 package com.example.back.user.imgprofile.service;
 
 import com.example.back.ExceptionHandler.CustomException;
+import com.example.back.user.User;
+import com.example.back.user.UserRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,7 +20,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
+@RequiredArgsConstructor
 public class FileSystemStorageService implements StorageService {
+    private final UserRepository userRepository;
+
     @Value("${media.location}")
     private String mediaLocation;
 
@@ -36,6 +42,7 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String store(MultipartFile file, String usuario) {
+        User user = userRepository.findUserByUsername(usuario);
         if (file.isEmpty()) {
             throw new RuntimeException("Failed to store empty file");
         }
@@ -56,7 +63,6 @@ public class FileSystemStorageService implements StorageService {
         System.out.println("entra en este metodo");
         try (InputStream inputStream = file.getInputStream()) {
             Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-
             return fileNameToStore;
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);

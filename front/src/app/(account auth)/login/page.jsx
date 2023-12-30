@@ -31,10 +31,15 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        const error = await response.text();
-        console.log("Response from server:", error);
-        setErrors([error]);
-        throw new Error(error);
+        let error;
+        try {
+          const errorData = await response.json();
+          error = errorData.message || "Error desconocido";
+        } catch (e) {
+          error = await response.text();
+        }
+
+        setErrors(error);
       }
       const data = await response.json();
       console.log(data);
@@ -70,18 +75,6 @@ const Login = () => {
           placeholder="Username"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
-        {errors && (
-          <div style={{ color: "red" }}>
-            <p>Error:</p>
-            <ul>
-              {errors.map((error, index) => (
-                <li key={index}>
-                  <p className="text-white">{error}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
         <input
           type="password"
           id="password"
@@ -91,6 +84,7 @@ const Login = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors && <p>{errors}</p>}
         <button
           type="submit"
           className="text-white text-center rounded-sm font-bold px-4 py-2 bg-button duration-300 hover:bg-buttonHover"

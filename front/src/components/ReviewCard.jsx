@@ -4,13 +4,13 @@ import Image from "next/image";
 
 const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
   return (
-    <article className="review flex gap-10 p-5" key={id}>
-      <div className="hidden md:flex flex-col items-center w-[100px]">
+    <article className="review flex gap-10 p-5 w-full" key={id}>
+      <div className="hidden md:flex flex-col items-center w-[120px]">
         <img
           className="w-full"
           src={`https://image.tmdb.org/t/p/original${poster}`}
         />
-        <p className="inline-flex justify-center items-center gap-2 mt-2">
+        <p className="inline-flex justify-center items-center gap-1 mt-2">
           Rating: {rating}
           <span className="text-xl md:text-3xl text-star">&#9733;</span>
         </p>
@@ -24,7 +24,7 @@ const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
           </a>
         </div>
         <p className="break-words">{review}</p>
-          <p className="text-sm text-gray">Reviewed at: {date}</p>
+        <p className="text-sm text-gray">Reviewed at: {date}</p>
       </div>
     </article>
   );

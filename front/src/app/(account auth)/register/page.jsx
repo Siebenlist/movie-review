@@ -9,7 +9,7 @@ import { userContext } from "@/context/propContext";
 import { useContext } from "react";
 
 const Register = () => {
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ const Register = () => {
       if (!response.ok) {
         const error = await response.text();
         console.log(error);
-        setErrors([error]);
+        setErrors(error);
       } else {
         const data = await response.json();
         console.log(data);
@@ -73,6 +73,9 @@ const Register = () => {
           placeholder="Username"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors.includes("Username") && (
+          <p className="text-white bg-red p-3">{errors}</p>
+        )}
         <input
           type="email"
           name="email"
@@ -82,6 +85,9 @@ const Register = () => {
           placeholder="Email"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors.includes("email") && (
+          <p className="text-white bg-red p-3">{errors}</p>
+        )}
         <input
           type="password"
           id="password"
@@ -91,17 +97,8 @@ const Register = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
-        {errors && (
-          <div style={{ color: "red" }}>
-            <p>Error:</p>
-            <ul>
-              {errors.map((error, index) => (
-                <li key={index}>
-                  <p className="text-white">{error}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {errors.includes("password") && (
+          <p className="text-white bg-red p-3">{errors}</p>
         )}
         <label htmlFor="" className="text-white">
           <input type="checkbox" className="mr-3" />I agree with the{" "}

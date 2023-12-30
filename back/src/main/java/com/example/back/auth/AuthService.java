@@ -26,17 +26,21 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    public AuthResponse login(LoginRequest loginRequest) {
+    public AuthResponse login(LoginRequest loginRequest) throws CustomException {
         if(loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
             throw new CustomException(400, "The fields can't be empty");
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        UserDetails userDetails = userRepository.findByUsername(loginRequest.getUsername())
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            UserDetails userDetails = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new CustomException(404, "User doesn't exist"));
-        String token = jwtService.getToken(userDetails);
-        return AuthResponse.builder()
+            String token = jwtService.getToken(userDetails);
+            return AuthResponse.builder()
                     .token(token)
                     .build();
+        }catch (Exception e) {
+            throw new CustomException(401, "Invalid credentials");
+        }
     }
 
 

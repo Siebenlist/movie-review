@@ -32,7 +32,7 @@ public class FavouriteController {
                     .build());
         }
         favouriteRepository.delete(fav);
-        return ResponseEntity.accepted().body(FavouriteResponse.builder().id(null).build());
+        return ResponseEntity.accepted().build();
     }
 
     //Get para devolver la pelicula si esta fav o no

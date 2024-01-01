@@ -35,7 +35,7 @@ public class FollowController {
             return ResponseEntity.ok().build();
         }
         followRepository.delete(follow);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/getFollow")

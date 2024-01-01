@@ -87,7 +87,7 @@ const MoviePage = ({ params }) => {
           </article>
         </div>
         <div className="max-w-[1200px]">
-          <div className="w-[500px] sm:w-[900px] md:w-[1200px]">
+          <div className="w-[500px] sm:w-[500px] md:w-[1200px]">
             <p className="text-slate uppercase w-full ">
               Reviews for this movie
             </p>

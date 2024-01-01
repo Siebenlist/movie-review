@@ -74,7 +74,7 @@ const Register = () => {
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
         {errors.includes("Username") && (
-          <p className="text-white bg-red p-3">{errors}</p>
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
         )}
         <input
           type="email"
@@ -86,7 +86,7 @@ const Register = () => {
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
         {errors.includes("email") && (
-          <p className="text-white bg-red p-3">{errors}</p>
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
         )}
         <input
           type="password"
@@ -98,7 +98,7 @@ const Register = () => {
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
         {errors.includes("password") && (
-          <p className="text-white bg-red p-3">{errors}</p>
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
         )}
         <label htmlFor="" className="text-white">
           <input type="checkbox" className="mr-3" />I agree with the{" "}

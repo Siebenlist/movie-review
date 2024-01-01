@@ -32,10 +32,7 @@ const MovieActions = () => {
       );
 
       if (res.ok) {
-        const favData = await res.json();
-        if (favData.id) {
-          setFavCheck(true);
-        }
+        setFavCheck(true);
       }
       if (res.status === 404) {
         setFavCheck(false);
@@ -60,10 +57,7 @@ const MovieActions = () => {
         });
 
         if (res.ok) {
-          const data = await res.json();
-          if (data.id !== null) {
-            setMovieFaved(true);
-          }
+          setMovieFaved(true);
         }
         if (res.status === 202) {
           setMovieFaved(false);
@@ -88,10 +82,7 @@ const MovieActions = () => {
       );
 
       if (res.ok) {
-        const data = await res.json();
-        if (data.id) {
-          setListCheck(true);
-        }
+        setListCheck(true);
       }
       if (res.status === 404) {
         setListCheck(false);
@@ -116,13 +107,9 @@ const MovieActions = () => {
         });
 
         if (res.ok) {
-          const data = await res.json();
-          console.log(data);
-          if (data.id !== null) {
-            setMovieListed(true);
-          }
+          setMovieListed(true);
         }
-        if (!res.ok) {
+        if (res.status == 202) {
           setMovieListed(false);
         }
       } catch (error) {

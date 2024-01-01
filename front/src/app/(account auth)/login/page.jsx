@@ -78,7 +78,7 @@ const Login = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
-        {errors && <p className="text-white bg-red p-3">{errors}</p>}
+        {errors && <p className="text-white bg-red p-3 rounded-sm">{errors}</p>}
         <button
           type="submit"
           className="text-white text-center rounded-sm font-bold px-4 py-2 bg-button duration-300 hover:bg-buttonHover"

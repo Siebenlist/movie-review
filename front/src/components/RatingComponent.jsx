@@ -11,6 +11,7 @@ const RatingComponent = () => {
   const [avgRating, setAvgRating] = useState(null);
   const [openReview, setOpenReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
+  const [error, setError] = useState("");
 
   const router = useRouter();
   const params = useParams();
@@ -72,6 +73,10 @@ const RatingComponent = () => {
       const res = await fetch("http://localhost:8080/review", options);
       if (res.ok) {
         setOpenReview(!openReview);
+      }
+      if (res.status === 406) {
+        const data = await res.text();
+        setError(data);
       }
     } catch {
       console.log("Error review");
@@ -173,7 +178,7 @@ const RatingComponent = () => {
               : "hidden"
           }
         >
-          <div className="flex flex-col items-start w-[250px] md:w-[500px] m-auto bg-primary p-7">
+          <div className="flex flex-col items-start w-[350px] md:w-[500px] m-auto bg-primary p-7">
             <div className="w-full flex justify-between items-center mb-5">
               <h2 className="font-bold text-3xl">Write a review</h2>
               <img
@@ -191,7 +196,9 @@ const RatingComponent = () => {
               className="w-full p-3 bg-[#0b0b05ab] resize-none outline-none mb-5"
               placeholder="Leave a review here!"
             />
-
+            {error && (
+              <p className="text-white bg-red p-3 my-3 rounded-sm">{error}</p>
+            )}
             <button
               onClick={submitReview}
               className="py-2 px-4 rounded-sm bg-button font-bold duration-200 hover:bg-buttonHover"

@@ -27,9 +27,7 @@ public class FavouriteController {
                     .user(user)
                     .build();
             favouriteRepository.save(newFav);
-            return ResponseEntity.ok(FavouriteResponse.builder()
-                    .id(newFav.getId())
-                    .build());
+            return ResponseEntity.ok().build();
         }
         favouriteRepository.delete(fav);
         return ResponseEntity.accepted().build();
@@ -46,9 +44,7 @@ public class FavouriteController {
         if (fav == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(FavouriteResponse.builder()
-                .id(fav.getId())
-                .build());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/favList")

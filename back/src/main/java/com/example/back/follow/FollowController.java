@@ -32,9 +32,7 @@ public class FollowController {
                     .followed(followed)
                     .build();
             followRepository.save(newFollow);
-            return ResponseEntity.ok(FollowResponse.builder()
-                    .id(newFollow.getId())
-                    .build());
+            return ResponseEntity.ok().build();
         }
         followRepository.delete(follow);
         return ResponseEntity.accepted().build();
@@ -51,9 +49,7 @@ public class FollowController {
         if (follow == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(FollowResponse.builder()
-                .id(follow.getId())
-                .build());
+        return ResponseEntity.ok().build();
     }
     @GetMapping(value = "/getFollowList")
     public ResponseEntity<FollowListResponse> getFollowList(@RequestParam String username) {

@@ -38,15 +38,11 @@ public class ReviewController {
                         .user(user)
                         .build();
                 reviewRepository.save(review);
-                return ResponseEntity.ok(ReviewResponse.builder()
-                        .id(review.getId())
-                        .build());
+                return ResponseEntity.ok().build();
         } else {
         actualReview.setReview(reviewText);
         reviewRepository.save(actualReview);
-        return ResponseEntity.ok(ReviewResponse.builder()
-                .id(actualReview.getId())
-                .build());
+        return ResponseEntity.ok().build();
         }
     }
 
@@ -60,9 +56,7 @@ public class ReviewController {
         if (review == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(ReviewResponse.builder()
-                    .id(review.getId())
-                    .build());
+            return ResponseEntity.ok().build();
         }
     }
 

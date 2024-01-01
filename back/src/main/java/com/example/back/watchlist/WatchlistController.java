@@ -26,9 +26,7 @@ public class WatchlistController {
                     .user(user)
                     .build();
             watchlistRepository.save(newWatch);
-            return ResponseEntity.ok(WatchlistResponse.builder()
-                    .id(newWatch.getId())
-                    .build());
+            return ResponseEntity.ok().build();
         }
         watchlistRepository.delete(watch);
         return ResponseEntity.accepted().build();
@@ -44,9 +42,7 @@ public class WatchlistController {
         if (watch == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(WatchlistResponse.builder()
-                .id(watch.getId())
-                .build());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/watchlist")

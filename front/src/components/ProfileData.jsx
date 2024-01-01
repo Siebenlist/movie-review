@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 const ProfileData = () => {
   const params = useParams();
   const userData = JSON.parse(getStorageData());
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState();
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [imagenURL, setImagenURL] = useState(null);
@@ -39,10 +39,10 @@ const ProfileData = () => {
         options
       );
       if (res.ok) {
-        const data = await res.json();
-        return data.id !== null;
-      } else {
-        throw new Error("Response not ok");
+        return true;
+      }
+      if (res.status === 404) {
+        return false;
       }
     } catch (error) {
       console.error("Error in getFollow:", error);
@@ -127,7 +127,7 @@ const ProfileData = () => {
   }, [isOpen]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-3 md:gap-0 justify-center md:justify-between items-center w-full">
+    <div className="flex flex-col md:flex-row gap-3 md:gap-20 justify-between items-center w-full">
       <div className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
         <div className="rounded-full border-2 border-white p-1 w-[150px] h-[150px]">
           <div className="relative w-full h-full rounded-full">

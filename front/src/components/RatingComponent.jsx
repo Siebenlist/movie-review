@@ -3,7 +3,7 @@ import "@/app/globals.css";
 import hamburgerClose from "../assets/hamburgerClose.svg";
 import React, { useState, useEffect } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const RatingComponent = () => {
   const [currentRating, setCurrentRating] = useState(null);
@@ -12,6 +12,7 @@ const RatingComponent = () => {
   const [openReview, setOpenReview] = useState(false);
   const [reviewText, setReviewText] = useState("");
 
+  const router = useRouter();
   const params = useParams();
 
   const getGlobalRatings = async () => {
@@ -101,27 +102,31 @@ const RatingComponent = () => {
   };
 
   const submitRating = async (rating) => {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-        Authorization: `Bearer ${userData.token}`,
-      },
-      body: JSON.stringify({
-        movieId: params.id,
-        rating: rating,
-        username: userData.user,
-      }),
-    };
+    if (!userData) {
+      router.push("/login");
+    } else {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json",
+          Authorization: `Bearer ${userData.token}`,
+        },
+        body: JSON.stringify({
+          movieId: params.id,
+          rating: rating,
+          username: userData.user,
+        }),
+      };
 
-    try {
-      const res = await fetch("http://localhost:8080/rating", options);
-      if (res.ok) {
-        const data = await res.json();
-        setCurrentRating(data.rating);
+      try {
+        const res = await fetch("http://localhost:8080/rating", options);
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentRating(data.rating);
+        }
+      } catch {
+        console.log("posteo rating fail");
       }
-    } catch {
-      console.log("posteo rating fail");
     }
   };
 

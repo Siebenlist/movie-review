@@ -1,12 +1,11 @@
 "use client";
 
-//TODO: HACER MAS LINDO EL COSO DE LA REVIEW PORQUE HAORA ESUNA CAGADA
-
 import MovieActions from "@/components/MovieActions";
 import ReviewCard from "@/components/ReviewCard";
 import { reviews } from "@/data/reviews";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { getStorageData } from "@/controllers/localStorageController";
+import Loading from "../loading";
 
 const MoviePage = ({ params }) => {
   const [movieData, setMovieData] = useState(null);
@@ -66,54 +65,58 @@ const MoviePage = ({ params }) => {
   if (!movieData) return <div>Loading...</div>;
 
   return (
-    <section className="flex flex-col justify-center items-start mt-10 md:mb-[150px] p-3 mx-auto min-h-fit max-w-[1200px]">
-      <div className="flex flex-col justify-center items-start md:flex-row mb-5 md:mb-[150px]">
-        <div className="w-full md:w-[30%] flex flex-col justify-center items-center mb-10 gap-5">
-          <img
-            src={`https://image.tmdb.org/t/p/original${movieData.poster_path}`}
-            className="w-[150px] md:w-[200px] border border-gray p-[1px] rounded-sm"
-            alt={"poster"}
-          />
-          <MovieActions />
+    <Suspense fallback={<Loading />}>
+      <section className="flex flex-col justify-center items-start mt-10 md:mb-[150px] p-3 mx-auto min-h-fit max-w-[1200px]">
+        <div className="flex flex-col justify-center items-start md:flex-row mb-5 md:mb-[150px]">
+          <div className="w-full md:w-[30%] flex flex-col justify-center items-center mb-10 gap-5">
+            <img
+              src={`https://image.tmdb.org/t/p/original${movieData.poster_path}`}
+              className="w-[150px] md:w-[200px] border border-gray p-[1px] rounded-sm"
+              alt={"poster"}
+            />
+            <MovieActions />
+          </div>
+          <article className="p-3 w-full md:w-[70%]">
+            <h1 className="text-xl md:text-4xl font-bold mb-5">
+              {movieData.original_title}{" "}
+              <span className="text-gray text-2xl">
+                ({movieData.release_date.split("-")[0]})
+              </span>
+            </h1>
+            <p className="break-words mb-5 w-full">{movieData.overview}</p>
+          </article>
         </div>
-        <article className="p-3 w-full md:w-[70%]">
-          <h1 className="text-xl md:text-4xl font-bold mb-5">
-            {movieData.original_title}{" "}
-            <span className="text-gray text-2xl">
-              ({movieData.release_date.split("-")[0]})
-            </span>
-          </h1>
-          <p className="break-words mb-5 w-full">{movieData.overview}</p>
-        </article>
-      </div>
-      <div>
         <div className="max-w-[1200px]">
-          <p className="text-slate uppercase">Reviews for this movie</p>
-          <div className="max-w-full h-[1px] bg-gray"></div>
+          <div className="w-[500px] sm:w-[900px] md:w-[1200px]">
+            <p className="text-slate uppercase w-full ">
+              Reviews for this movie
+            </p>
+            <div className="w-full h-[1px] bg-gray"></div>
+          </div>
+          <div className="divide-y-2 divide-slate divide-opacity-50">
+            {movieReviews.map((review) => {
+              return (
+                <ReviewCard
+                  key={review.id}
+                  review={review.review}
+                  poster={movieData.poster_path}
+                  rating={review.rating.rating}
+                  user={review.user.username}
+                  pfp={
+                    "https://hips.hearstapps.com/hmg-prod/images/dl-u525201-016-1673780958.jpg?crop=0.7234375xw:1xh;center,top&resize=640:*"
+                  }
+                  date={
+                    review.updated_at !== null
+                      ? review.updated_at
+                      : review.created_at
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
-        <div className="divide-y-2 divide-slate divide-opacity-50">
-          {movieReviews.map((review) => {
-            return (
-              <ReviewCard
-                key={review.id}
-                review={review.review}
-                poster={movieData.poster_path}
-                rating={review.rating.rating}
-                user={review.user.username}
-                pfp={
-                  "https://hips.hearstapps.com/hmg-prod/images/dl-u525201-016-1673780958.jpg?crop=0.7234375xw:1xh;center,top&resize=640:*"
-                }
-                date={
-                  review.updated_at !== null
-                    ? review.updated_at
-                    : review.created_at
-                }
-              />
-            );
-          })}
-        </div>
-      </div>
-    </section>
+      </section>
+    </Suspense>
   );
 };
 

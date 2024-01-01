@@ -125,10 +125,10 @@ const Profile = ({ params }) => {
 
   return (
     <section className="flex flex-col justify-center my-5 max-w-[1200px] mx-auto">
-      <article className="w-full">
-        <div className="w-[500px] md:w-[900px]">
+      <article className="w-[500px] md:w-[900px]">
+        <div className="w-full">
           <p className="text-slate uppercase">Fav films</p>
-          <div className="min-w-full h-[1px] bg-gray"></div>
+          <div className="w-full h-[1px] bg-gray"></div>
         </div>
         <div
           ref={sliderRef}
@@ -152,9 +152,9 @@ const Profile = ({ params }) => {
       </article>
 
       <article className="flex flex-col gap-5 my-[100px] w-full">
-        <div className="w-full">
+        <div className="w-[500px] md:w-[900px]">
           <p className="text-slate uppercase">Recent reviews</p>
-          <div className="max-w-full h-[1px] bg-gray"></div>
+          <div className="w-full h-[1px] bg-gray"></div>
         </div>
         <div className="flex flex-col gap-2 divide-y border-b-[1px] border-gray divide-slate">
           {reviewList.length === 0 ? (

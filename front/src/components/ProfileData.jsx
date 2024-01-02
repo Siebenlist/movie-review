@@ -1,7 +1,9 @@
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import FollowBtn from "./FollowBtn";
 import { getStorageData } from "@/controllers/localStorageController";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import defaultUser from "@/assets/defaultUser.jpg";
+import Image from "next/image";
 
 const ProfileData = () => {
   const params = useParams();
@@ -131,21 +133,29 @@ const ProfileData = () => {
       <div className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
         <div className="rounded-full border-2 border-white p-1 w-[150px] h-[150px]">
           <div className="relative w-full h-full rounded-full">
-            <label className="bottom-0 right-0 w-full h-full text-2xl absolute group duration-200 ease-in-out hover:flex hover:cursor-pointer justify-center items-center hover:bg-black/60 rounded-full z-10">
-              <p className="hidden group-hover:block">&#128247;</p>
-              <input
-                className="w-full h-full rounded-full sr-only"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </label>
+            {userData?.user === params.username && (
+              <label className="bottom-0 right-0 w-full h-full text-2xl absolute group duration-200 ease-in-out hover:flex hover:cursor-pointer justify-center items-center hover:bg-black/60 rounded-full z-10">
+                <p className="hidden group-hover:block">&#128247;</p>
+                <input
+                  className="w-full h-full rounded-full sr-only"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </label>
+            )}
 
-            {imagenURL && (
+            {imagenURL ? (
               <img
-                className="top-0 left-0 rounded-full w-full h-full aspect-square object-cover absolute -z-10"
                 src={imagenURL}
-                alt="Imagen de perfil"
+                className="top-0 left-0 rounded-full w-full h-full aspect-square object-cover absolute -z-10"
+                alt="Profile picture"
+              />
+            ) : (
+              <Image
+                className="top-0 left-0 rounded-full w-full h-full aspect-square object-cover absolute -z-10"
+                src={defaultUser}
+                alt="Profile picture"
               />
             )}
           </div>

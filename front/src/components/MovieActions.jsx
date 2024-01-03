@@ -4,18 +4,19 @@ import { useEffect, useState } from "react";
 import React from "react";
 import RatingComponent from "./RatingComponent";
 import { getStorageData } from "@/controllers/localStorageController";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import watchlistOn from "../assets/watchlistOn.svg";
 import watchlistOff from "../assets/watchlistOff.svg";
 
 const MovieActions = () => {
-  const [movieFaved, setMovieFaved] = useState({ id: null });
+  const [movieFaved, setMovieFaved] = useState(false);
   const [favCheck, setFavCheck] = useState();
-  const [movieListed, setMovieListed] = useState({ id: null });
+  const [movieListed, setMovieListed] = useState(false);
   const [listCheck, setListCheck] = useState();
   const userData = JSON.parse(getStorageData()); //Te trae del localstorage un json stringificado, aca lo parseo a json posta para poder extraer
   const params = useParams();
+  const router = useRouter();
 
   const checkFav = async () => {
     try {
@@ -31,12 +32,10 @@ const MovieActions = () => {
       );
 
       if (res.ok) {
-        const favData = await res.json();
-        if (favData.id !== null) {
-          setFavCheck(true);
-        } else {
-          setFavCheck(false);
-        }
+        setFavCheck(true);
+      }
+      if (res.status === 404) {
+        setFavCheck(false);
       }
     } catch {
       console.log("Error papito");
@@ -44,22 +43,28 @@ const MovieActions = () => {
   };
 
   const handleFav = async () => {
-    try {
-      const res = await fetch("http://localhost:8080/fav", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userData.token}`,
-        },
-        body: JSON.stringify({ username: userData.user, movieId: params.id }),
-      });
+    if (!userData) {
+      router.push("/login");
+    } else {
+      try {
+        const res = await fetch("http://localhost:8080/fav", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({ username: userData.user, movieId: params.id }),
+        });
 
-      if (res.ok) {
-        const data = await res.json();
-        setMovieFaved(data);
+        if (res.ok) {
+          setMovieFaved(true);
+        }
+        if (res.status === 202) {
+          setMovieFaved(false);
+        }
+      } catch {
+        console.log("Erro ao adicionar a lista de favoritos");
       }
-    } catch {
-      alert("Erro ao adicionar a lista de favoritos");
     }
   };
 
@@ -77,12 +82,10 @@ const MovieActions = () => {
       );
 
       if (res.ok) {
-        const watchlistData = await res.json();
-        if (watchlistData.id !== null) {
-          setListCheck(true);
-        } else {
-          setListCheck(false);
-        }
+        setListCheck(true);
+      }
+      if (res.status === 404) {
+        setListCheck(false);
       }
     } catch {
       console.log("Error papito check watchlist");
@@ -90,25 +93,28 @@ const MovieActions = () => {
   };
 
   const handleWatchlist = async () => {
-    try {
-      const res = await fetch("http://localhost:8080/handleWatchlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userData.token}`,
-        },
-        body: JSON.stringify({
-          username: userData.user,
-          movieId: params.id,
-        }),
-      });
+    if (!userData) {
+      router.push("/login");
+    } else {
+      try {
+        const res = await fetch("http://localhost:8080/handleWatchlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({ username: userData.user, movieId: params.id }),
+        });
 
-      if (res.ok) {
-        const data = await res.json();
-        setMovieListed(data);
+        if (res.ok) {
+          setMovieListed(true);
+        }
+        if (res.status == 202) {
+          setMovieListed(false);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch {
-      alert("Erro ao adicionar a lista de favoritos");
     }
   };
 

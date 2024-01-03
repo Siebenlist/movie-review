@@ -9,6 +9,7 @@ import { userContext } from "@/context/propContext";
 import { useContext } from "react";
 
 const Register = () => {
+  const [errors, setErrors] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +31,11 @@ const Register = () => {
         body: JSON.stringify(submitData),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        const error = await response.text();
+        console.log(error);
+        setErrors(error);
+      } else {
         const data = await response.json();
         console.log(data);
         const datatoken = data.token.split(".")[1];
@@ -46,8 +51,6 @@ const Register = () => {
 
         router.push("/");
         router.refresh();
-      } else {
-        console.error("Registracion fallada");
       }
     } catch (error) {
       console.error("Error en el registro:", error);
@@ -70,6 +73,9 @@ const Register = () => {
           placeholder="Username"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors.includes("Username") && (
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
+        )}
         <input
           type="email"
           name="email"
@@ -79,6 +85,9 @@ const Register = () => {
           placeholder="Email"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors.includes("email") && (
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
+        )}
         <input
           type="password"
           id="password"
@@ -88,7 +97,9 @@ const Register = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
-
+        {errors.includes("password") && (
+          <p className="text-white bg-red p-3 rounded-sm">{errors}</p>
+        )}
         <label htmlFor="" className="text-white">
           <input type="checkbox" className="mr-3" />I agree with the{" "}
           <a href="#" className="text-button">

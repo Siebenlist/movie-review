@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { useState } from "react";
 
 const Login = () => {
+  const [errors, setErrors] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,29 +30,27 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        const datatoken = data.token.split(".")[1];
-        const tokendecrypt = atob(datatoken);
-        const tokenparsed = JSON.parse(tokendecrypt);
-        const userLogged = {
-          token: data.token,
-          user: tokenparsed.sub,
-        };
-        saveLocalStorageData(userLogged);
-        setUserLogged(userLogged);
-        console.log("Login exitoso");
-
-        router.push("/");
-        router.refresh();
-      } else {
-        // Handle login failure
-        console.error("Fallo el login");
+      if (!response.ok) {
+        const error = await response.text();
+        console.log(error);
+        setErrors(error);
       }
-    } catch (error) {
-      console.error("Error al iniciar sesion");
-    }
+      const data = await response.json();
+      console.log(data);
+      const datatoken = data.token.split(".")[1];
+      const tokendecrypt = atob(datatoken);
+      const tokenparsed = JSON.parse(tokendecrypt);
+      const userLogged = {
+        token: data.token,
+        user: tokenparsed.sub,
+      };
+      saveLocalStorageData(userLogged);
+      setUserLogged(userLogged);
+      console.log("Login exitoso");
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {}
   };
 
   return (
@@ -79,6 +78,7 @@ const Login = () => {
           placeholder="Password"
           className="py-2 px-4 rounded-sm bg-input placeholder:bg-input"
         />
+        {errors && <p className="text-white bg-red p-3 rounded-sm">{errors}</p>}
         <button
           type="submit"
           className="text-white text-center rounded-sm font-bold px-4 py-2 bg-button duration-300 hover:bg-buttonHover"

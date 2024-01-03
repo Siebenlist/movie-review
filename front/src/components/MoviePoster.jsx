@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import "keen-slider/keen-slider.min.css";
 
 const MoviePoster = ({ id, poster, title, carousel }) => {
   return (
@@ -9,13 +11,15 @@ const MoviePoster = ({ id, poster, title, carousel }) => {
       }`}
       key={id}
     >
-      <a href={`http://localhost:3000/movie/${id}`}>
-        <img
+      <Link href={`http://localhost:3000/movie/${id}`}>
+        <Image
           className="border border-white rounded-sm min-w-full min-h-full"
           src={`https://image.tmdb.org/t/p/original/${poster}`}
+          width={300}
+          height={300}
           alt={`${title} poster`}
         />
-      </a>
+      </Link>
     </div>
   );
 };

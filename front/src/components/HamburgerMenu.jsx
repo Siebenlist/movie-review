@@ -133,7 +133,7 @@ const HamburgerMenu = ({ logged }) => {
             <Link href="/">Home</Link>
           </li>
           <li className="p-3">
-            <Link href={`/profile/${userData.user}`}>Profile</Link>
+            <Link href={`/profile/${userData?.user}`}>Profile</Link>
           </li>
           <li>
             <DropdownMenu />

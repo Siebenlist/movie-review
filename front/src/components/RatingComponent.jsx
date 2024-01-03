@@ -174,11 +174,11 @@ const RatingComponent = () => {
         <div
           className={
             openReview
-              ? "flex absolute top-0 left-0 w-full h-full bg-[#000000cc]"
+              ? "flex absolute top-0 left-0 min-w-full min-h-[200vh] bg-[#000000cc]"
               : "hidden"
           }
         >
-          <div className="flex flex-col items-start w-[350px] md:w-[500px] m-auto bg-primary p-7">
+          <div className="flex flex-col items-start w-[350px] md:w-[500px] h-fit mx-auto my-[250px] bg-primary p-7">
             <div className="w-full flex justify-between items-center mb-5">
               <h2 className="font-bold text-3xl">Write a review</h2>
               <img

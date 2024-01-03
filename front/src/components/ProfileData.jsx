@@ -14,6 +14,7 @@ const ProfileData = () => {
   const [imagenURL, setImagenURL] = useState(null);
   const [image, setImage] = useState(null);
   const [prevImage, setPrevImage] = useState(null);
+  const [followCount, setFollowCount] = useState({});
 
   const checkFollow = async () => {
     try {
@@ -128,6 +129,28 @@ const ProfileData = () => {
     };
   }, [isOpen]);
 
+  const getFollowCount = async () => {
+    const options = {
+      method: "GET",
+    };
+    try {
+      const res = await fetch(
+        `http://localhost:8080/getFollowCount?username=${params.username}`,
+        options
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setFollowCount(data);
+      }
+    } catch (error) {
+      console.log("Error en el get de followers", error);
+    }
+  };
+
+  useEffect(() => {
+    getFollowCount();
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row gap-3 md:gap-20 justify-between items-center w-full">
       <div className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-5">
@@ -164,10 +187,12 @@ const ProfileData = () => {
           <h3 className="text-2xl font-bold">{params.username}</h3>
           <div className="flex flex-row gap-5">
             <p>
-              Favs <span className="font-bold">3.3k</span>
+              Followers{" "}
+              <span className="font-bold">{followCount.followerCount}</span>
             </p>
             <p>
-              Followers <span className="font-bold">3.3k</span>
+              Following{" "}
+              <span className="font-bold">{followCount.followedCount}</span>
             </p>
           </div>
           <button

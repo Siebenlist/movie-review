@@ -1,8 +1,13 @@
 import React from "react";
 import reviewStar from "../assets/reviewStar.svg";
 import Image from "next/image";
+import Link from "next/link";
+
 
 const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
+  
+  
+
   return (
     <article className="review flex gap-10 p-5 w-full" key={id}>
       <div className="hidden md:flex flex-col items-center w-[120px]">
@@ -18,14 +23,17 @@ const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
       <div className="flex flex-col justify-start gap-2 max-w-[1000px]">
         <h3 className="font-bold text-xl md:text-3xl">{movie}</h3>
         <div className="flex items-center gap-3">
-          <img
+          {
+            user && <img
             className="w-[40px] h-[40px] rounded-full aspect-square"
             src={`http://localhost:8080/media/${user}.jpg`}
             alt={user}
           />
-          <a href="#" className="font-semibold">
+
+          }
+          <Link href={`/profile/${user}`} className="font-semibold">
             {user}
-          </a>
+          </Link>
         </div>
         <p className="break-words">{review}</p>
         <p className="text-sm text-gray">Reviewed at: {date}</p>

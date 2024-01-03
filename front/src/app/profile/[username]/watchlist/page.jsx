@@ -76,7 +76,7 @@ const Watchlist = ({ params }) => {
     <section className="max-w-[1200px] h-full mx-auto">
       <div className="flex flex-col w-full md:w-[1200px]">
         <div className="w-full">
-          <p className="text-slate uppercase">Fav films</p>
+          <p className="text-slate uppercase">Watchlist</p>
           <div className="max-w-full h-[1px] bg-gray"></div>
         </div>
         <div className="relative grid grid-cols-3 md:grid-cols-6 auto-rows-max mt-2 place-items-center gap-2 p-5 w-full h-[500px] overflow-y-scroll">

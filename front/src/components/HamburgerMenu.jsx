@@ -7,7 +7,10 @@ import hamburgerClose from "../assets/hamburgerClose.svg";
 import searchIcon from "../assets/searchIcon.svg";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteStorageData } from "@/controllers/localStorageController";
+import {
+  deleteStorageData,
+  getStorageData,
+} from "@/controllers/localStorageController";
 import { userContext } from "@/context/propContext";
 import { useContext } from "react";
 import Link from "next/link";
@@ -15,6 +18,7 @@ import Link from "next/link";
 const HamburgerMenu = ({ logged }) => {
   const [nav, setNav] = useState(false);
   const { setUserLogged } = useContext(userContext);
+  const userData = JSON.parse(getStorageData());
 
   const router = useRouter();
 
@@ -129,7 +133,7 @@ const HamburgerMenu = ({ logged }) => {
             <Link href="/">Home</Link>
           </li>
           <li className="p-3">
-            <Link href="/profile">Profile</Link>
+            <Link href={`/profile/${userData.user}`}>Profile</Link>
           </li>
           <li>
             <DropdownMenu />

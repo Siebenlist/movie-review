@@ -2,8 +2,8 @@
 
 import MoviePoster from "@/components/MoviePoster";
 
-import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 import ReviewCard from "@/components/ReviewCard";
 import { getStorageData } from "@/controllers/localStorageController";
 import { useEffect, useState } from "react";
@@ -18,12 +18,13 @@ const Profile = ({ params }) => {
   const [sliderRef] = useKeenSlider({
     renderMode: "performance",
     rubberband: false,
+    mode: "snap",
     breakpoints: {
       "(min-width: 400px)": {
-        slides: { perView: 3.1, spacing: 10 },
+        slides: { perView: 3.1, spacing: 5 },
       },
-      "(min-width: 1000px)": {
-        slides: { perView: 6.1, spacing: 10 },
+      "(min-width: 900px)": {
+        slides: { perView: 4.1, spacing: 10 },
       },
     },
     slides: { perView: 2 },
@@ -48,8 +49,7 @@ const Profile = ({ params }) => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNmNhYTNjZDBlZmRjODI2ZWRhNWVkNWYyMWZlMDllMiIsInN1YiI6IjYzNmY4YjBiZDdmYmRhMDA5MDVkOTJjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0IbstPtIVklqlKXghzWLmq2AGigTFlb2cCWbPEZhf0M",
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
       },
     };
 
@@ -144,6 +144,7 @@ const Profile = ({ params }) => {
                 <MoviePoster
                   poster={posterPath.path}
                   id={favList[index].movieId}
+                  carousel
                 />
               </div>
             ))

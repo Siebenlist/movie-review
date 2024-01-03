@@ -21,8 +21,7 @@ const DropdownMenu = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNmNhYTNjZDBlZmRjODI2ZWRhNWVkNWYyMWZlMDllMiIsInN1YiI6IjYzNmY4YjBiZDdmYmRhMDA5MDVkOTJjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0IbstPtIVklqlKXghzWLmq2AGigTFlb2cCWbPEZhf0M",
+        Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
       },
     };
 
@@ -79,7 +78,7 @@ const DropdownMenu = () => {
       <ul
         onMouseEnter={handleDropdown}
         onMouseLeave={closeDropdown}
-        className={`flex-col flex-wrap bg-slate md:bg-menu text-black md:text-white rounded-md absolute z-40 ${
+        className={`flex-col flex-wrap overflow-scroll max-h-[400px] bg-slate md:bg-menu text-black md:text-white rounded-md absolute z-40 ${
           open ? "flex" : "hidden"
         }`}
       >

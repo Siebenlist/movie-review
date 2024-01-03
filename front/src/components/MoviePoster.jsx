@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import "keen-slider/keen-slider.min.css";
 
 const MoviePoster = ({ id, poster, title, carousel }) => {
   return (

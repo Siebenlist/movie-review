@@ -18,7 +18,11 @@ const ReviewCard = ({ id, poster, rating, movie, user, review, pfp, date }) => {
       <div className="flex flex-col justify-start gap-2 max-w-[1000px]">
         <h3 className="font-bold text-xl md:text-3xl">{movie}</h3>
         <div className="flex items-center gap-3">
-          <img className="w-[40px] rounded-full" src={`http://localhost:8080/media/${user}.jpg`} alt={user} />
+          <img
+            className="w-[40px] h-[40px] rounded-full aspect-square"
+            src={`http://localhost:8080/media/${user}.jpg`}
+            alt={user}
+          />
           <a href="#" className="font-semibold">
             {user}
           </a>

@@ -233,6 +233,7 @@ export default function Home() {
               <ReviewCard
                 key={reviews[index].movieId}
                 review={reviews[index].review}
+                user={reviews[index].user.username}
                 poster={posterPath.path}
                 rating={reviews[index].rating.rating}
                 movie={posterPath.title}
